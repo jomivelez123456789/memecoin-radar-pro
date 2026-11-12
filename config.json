@@ -1,0 +1,19 @@
+{
+  "chains": ["solana", "base"],
+  "discovery_limit": 16,
+  "min_liquidity_usd": 50000,
+  "min_volume_h1": 10000,
+  "min_age_hours": 6,
+  "min_transactions_h1": 40,
+  "min_buy_ratio": 0.58,
+  "min_change_h1": 2,
+  "max_change_h1": 35,
+  "min_relative_volume": 1.5,
+  "entry_score": 75,
+  "exit_change_h1": -15,
+  "liquidity_drop_fraction": 0.40,
+  "cooldown_hours": 6,
+  "max_alerts_per_run": 8,
+  "signal_watch_hours": 48,
+  "max_tracked_tokens": 100
+}

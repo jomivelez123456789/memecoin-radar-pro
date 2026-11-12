@@ -1,0 +1,31 @@
+{
+  "checked_at_utc": "2026-11-12T16:38:37.319860+00:00",
+  "discovered": 16,
+  "market_observations": 16,
+  "missing": 0,
+  "discovery_errors": [],
+  "known_tokens_observed": [
+    "base:0x4200000000000000000000000000000000000006",
+    "solana:So11111111111111111111111111111111111111112"
+  ],
+  "known_tokens_missing": [],
+  "action_pins": {
+    "checkout": "11bd71901bbe5b1630ceea73d27597364c9af683",
+    "setup-python": "a26af69be951a213d495a4c3e4e4022e16d87065"
+  },
+  "links": {
+    "base:0x4200000000000000000000000000000000000006": {
+      "chart": "https://dexscreener.com/base/0x72AB388E2E2F6FaceF59E3C3FA2C4E29011c2D38",
+      "app": "https://phantom.com/ul/v1/fungible?token=eip155%3A8453%2Ferc20%3A0x4200000000000000000000000000000000000006",
+      "contract": "0x4200000000000000000000000000000000000006"
+    },
+    "solana:So11111111111111111111111111111111111111112": {
+      "chart": "https://dexscreener.com/solana/Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE",
+      "app": "https://phantom.com/ul/v1/fungible?token=solana%3A4sGjMW1sUnHzSxGspuhpqLDx6wiyjNtZ%2Fspl%3ASo11111111111111111111111111111111111111112",
+      "contract": "So11111111111111111111111111111111111111112"
+    }
+  },
+  "iphone_opening": "não testado num iPhone",
+  "telegram_delivery": "pendente de configuração",
+  "github_execution": "pendente de publicação e segredos"
+}
