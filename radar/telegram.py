@@ -9,9 +9,20 @@ def fmt(value, suffix=""):
     return "indisponível" if value is None else f"{value:,.8g}{suffix}"
 
 
+def stamp(value):
+    return datetime.fromtimestamp(value, timezone.utc).strftime("%d/%m/%Y %H:%M UTC") if value else "sem observação"
+
+
 def alert(s, analysis, category, reasons, config):
     link = links(s["chain"], s["address"], s.get("pair"))
-    stamp = datetime.fromtimestamp(s["observed_at"], timezone.utc).strftime("%d/%m/%Y %H:%M UTC")
+    observed = stamp(s["observed_at"])
+    if category.startswith("A"):
+        invalidation = (f"liquidez &lt; ${config['min_liquidity_usd']:g}, momentum fora de "
+                        f"{config['min_change_h1']:g}–{config['max_change_h1']:g}%/1h ou dados incompletos.")
+    elif category.startswith("B"):
+        invalidation = "reavaliar se o preço voltar entre os níveis definidos e a liquidez recuperar; confirmar dados atuais."
+    else:
+        invalidation = "reavaliar com dados completos e atividade normalizada; riscos contratuais continuam desconhecidos."
     text = (f"<b>{category}</b>\n{html.escape(s['name'])} ({html.escape(s['symbol'])}) · {s['chain']}\n"
             f"<code>{s['address']}</code>\n"
             f"Preço observado: ${fmt(s['price'])} · 1h: {fmt(s['change_h1'], '%')}\n"
@@ -19,9 +30,8 @@ def alert(s, analysis, category, reasons, config):
             f"Score: {analysis['score']:g}/100 · Compras: {fmt(analysis['buy_ratio'] * 100 if analysis['buy_ratio'] is not None else None, '%')}\n"
             f"RVOL: {fmt(analysis['relative_volume'])} · Risco: {analysis['risk_class']}\n"
             f"Motivo: {html.escape('; '.join(reasons))}\n"
-            f"Invalidação: liquidez &lt; ${config['min_liquidity_usd']:g}, momentum fora de "
-            f"{config['min_change_h1']:g}–{config['max_change_h1']:g}%/1h ou dados incompletos.\n"
-            f"{stamp} · consulta à API; última negociação não confirmada.\n"
+            f"Invalidação: {invalidation}\n"
+            f"{observed} · consulta à API; última negociação não confirmada.\n"
             "Sem garantia de rentabilidade. Contrato, holders, mint/freeze e venda não verificados.\n"
             f"Detalhes: <code>/detail {s['chain']} {s['address']}</code>")
     buttons = [[{"text": "Ver gráfico", "url": link["chart"]},

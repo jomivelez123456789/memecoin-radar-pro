@@ -1,7 +1,7 @@
 import html
 from .model import identity
 from .positions import register, close, estimate
-from .telegram import fmt
+from .telegram import fmt, stamp
 
 HELP = """<b>Radar — comandos privados</b>
 /watch REDE CONTRATO — acompanhar
@@ -13,7 +13,7 @@ HELP = """<b>Radar — comandos privados</b>
 /detail REDE CONTRATO — última análise
 /health — estado da última verificação
 Valores em USD, ponto decimal. Preços de referência, sem ordens.
-Exemplo de formação em docs/FORMACAO.md.
+<a href="https://github.com/jomivelez123456789/memecoin-radar-pro/blob/main/docs/FORMACAO.md">Guia de formação e exercícios</a>
 Não enviar frases de recuperação, chaves ou palavras-passe.
 Comandos são processados na próxima execução, não em tempo real."""
 
@@ -58,7 +58,9 @@ def process(text, state, config, now):
             lines.append(f"<code>{p['id']}</code> {p['mode']} · {p['key']}\n"
                          f"Saldo {fmt(p['remaining'])} · preço ref. ${fmt(price)} · "
                          f"P/L aberto ${fmt(pnl)} · realizado ${fmt(p['realized_pnl'])}\n"
-                         f"Observação API: {snapshot.get('observed_at', 'sem dados')} (epoch UTC)")
+                         f"Última consulta: {stamp(snapshot.get('observed_at'))}\n"
+                         f"Entrada ${fmt(p['entry'])} · taxa entrada ${fmt(p['entry_fee'])} · "
+                         f"stop ${fmt(p['stop'])} · objetivo ${fmt(p['take'])}")
         lines.append("Estimativa aberta sem taxa de saída/slippage; preço pode estar desatualizado e não ser executável.")
         return "\n".join(lines)
     if command == "/detail" and len(args) == 2:
@@ -72,12 +74,21 @@ def process(text, state, config, now):
         return (f"<b>Análise de referência</b>\n<code>{key}</code>\n{html.escape(checks)}\n"
                 f"Score {a['score']:g}/100 · compras/vendas 1h: {fmt(s['buys'])}/{fmt(s['sells'])}\n"
                 f"Variação 24h {fmt(s['change_h24'], '%')} · idade do par {fmt(s['pool_age_hours'])}h\n"
-                f"Observação API epoch UTC: {s['observed_at']}\n"
+                f"Última consulta: {stamp(s['observed_at'])}\n"
                 f"Ausências: {html.escape(', '.join(a['missing']) or 'campos de mercado completos')}\n"
                 "Idade do par não é idade do token. Não há auditoria: holders, baleias, LP, "
                 "mint/freeze, honeypots e restrições de venda desconhecidos. Score não é probabilidade de lucro.")
     if command == "/health":
-        return "<b>Última verificação</b>\n" + html.escape(str(data["health"]))
+        health = data["health"]
+        status = {"ok": "a funcionar", "degradado": "dados incompletos", "falha": "falha na última verificação"}
+        return ("<b>Estado do radar</b>\n"
+                f"Estado: {status.get(health.get('status'), 'a aguardar primeira verificação')}\n"
+                f"Última consulta: {stamp(health.get('last_attempt'))}\n"
+                f"Última recolha com dados: {stamp(health.get('last_market_success'))}\n"
+                f"Tokens observados: {health.get('observations', 0)} · sem dados: {health.get('missing', 0)}\n"
+                f"Sinais nessa consulta: {health.get('signals', 0)}\n"
+                "Verificações previstas de 15 em 15 minutos, sujeitas a atrasos. "
+                "Este comando descreve a verificação anterior ao processamento da mensagem.")
     return HELP
 
 
