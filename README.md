@@ -7,8 +7,10 @@ Monitorização experimental em Python, em português europeu. **Não compra, ve
 - Recolha real de DexScreener e descoberta complementar de pools no GeckoTerminal: verificadas.
 - Motor de filtros, alertas A/B/C, lista manual, posições simuladas/reais registadas manualmente, vendas parciais e histórico: implementados.
 - Mensagens Telegram com gráfico, token no Phantom, contrato copiável e `/detail`: implementadas; entrega num Telegram real depende da configuração pessoal.
-- Código e workflows publicados no GitHub; testes remotos e duas execuções reais do radar concluídos com sucesso. Telegram configurado e agendamento de 15 em 15 minutos ativado, com histórico cifrado.
-- Notícias e categoria D, auditoria on-chain e imagens de gráficos: melhorias futuras, sem acesso fictício a plataformas.
+- Código e workflows publicados no GitHub; Telegram configurado e consultas previstas a cada 5 minutos, com histórico cifrado. O agendamento pode atrasar ou falhar; não há garantia de serviço contínuo em tempo real.
+- Mensagens simples com emojis, botões, registo guiado de compras/simulações/vendas e acompanhamento separado de até 30 posições abertas, com resumos periódicos e avisos de níveis/risco.
+- RSS de Cointelegraph, Decrypt e CoinDesk, com falhas explicitamente identificadas. Notícias só são ligadas a uma moeda quando mencionam endereço completo e rede, juntamente com atividade de mercado. Não verificam a veracidade da notícia nem aumentam o score.
+- Redes sociais, auditoria on-chain e imagens de gráficos continuam fora desta versão; não existe acesso fictício a plataformas nem uma estratégia de lucro validada.
 
 ## Começar
 
@@ -23,9 +25,9 @@ A instalação desta entrega usa [@MemecoinRadarPro_7F3A_bot](https://t.me/Memec
 
 ## Utilização após ativação
 
-No Telegram, envia `/help`, `/health` ou `/positions`. Os comandos são processados durante a execução seguinte, com atraso nominal de até 15 minutos, potencialmente maior. Não há um serviço permanentemente ligado.
+No Telegram, envia `/ajuda`, `/estado` ou `/posicoes`. `/comprar`, `/vender`, `/depositar`, `/retirar` e `/saidas` explicam os passos sem jargão. Os comandos e botões são processados durante a execução seguinte, prevista de 5 em 5 minutos, potencialmente mais tarde. Não há um serviço permanentemente ligado.
 
-`/simulate REDE CONTRATO PREÇO QTD TAXA STOP OBJETIVO` regista uma simulação. `/register real ...` serve exclusivamente para registar uma compra que já efetuaste manualmente. Nenhum sinal significa que compraste.
+Usa «🧪 Simular» ou «📝 Já comprei» no alerta, confirma o contrato e responde a um formulário curto numa única mensagem. Só regista compras reais que já efetuaste manualmente. «👀 Só acompanhar» não cria uma posição. Em `/posicoes`, «📝 Registar venda» atualiza o registo depois da venda manual ou durante uma simulação. `/tecnico` mantém os comandos completos opcionais. Nenhum sinal significa que compraste.
 
 Todos os preços e registos monetários são em USD. Um preço apresentado não garante uma venda por esse preço. Stop e objetivo são referências para alertas, sem execução de ordens.
 

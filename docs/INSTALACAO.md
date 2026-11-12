@@ -89,7 +89,7 @@ Se falta o estado e `initialize` não foi autorizado, o radar para. Não uses re
 
 ## 7. Frequência, custos e disponibilidade
 
-O agendamento é aos minutos 07, 22, 37 e 52 de cada hora UTC. Não exige computador ou ChatGPT ligados **depois de ativado no GitHub**. São até 96 execuções diárias; não é streaming nem vigilância contínua. Há uma janela entre consultas e a saída pode ocorrer muito depois de o mercado ter mudado.
+O agendamento é aos minutos 02, 07, 12, 17, 22, 27, 32, 37, 42, 47, 52 e 57 de cada hora UTC. Não exige computador ou ChatGPT ligados **depois de ativado no GitHub**. São até 288 execuções diárias previstas; não é streaming nem vigilância contínua. Há uma janela entre consultas e a saída pode ocorrer muito depois de o mercado ter mudado. Os botões e respostas guiadas também aguardam uma execução; não respondem instantaneamente.
 
 O GitHub confirma execução gratuita em repositórios públicos com runners padrão; repositórios privados têm franquias e podem gerar cobrança. Este projeto usa `ubuntu-latest` padrão, sem cache nem upload de artifacts. Limita cada execução a dez minutos e mantém execuções serializadas. Não utiliza APIs pagas nem introduz pagamentos. Fontes públicas podem mudar condições ou ficar indisponíveis.
 

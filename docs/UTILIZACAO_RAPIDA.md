@@ -5,9 +5,9 @@ Abre [Memecoin Radar Pro no Telegram](https://t.me/MemecoinRadarPro_7F3A_bot). A
 ## Começar no iPhone
 
 1. Abre o bot pelo link acima. As mensagens enviadas durante a configuração devem estar na conversa.
-2. Envia `/help` para consultar os comandos e o guia completo. A resposta chega na próxima execução, prevista a cada 15 minutos, podendo atrasar.
-3. Envia `/health` para consultar o estado e a hora da última recolha. Uma consulta bem-sucedida não significa que exista uma oportunidade de entrada.
-4. Envia `/positions`. A posição criada na instalação é **simulada e está encerrada, com saldo zero**. Não compraste nem vendeste qualquer ativo durante os testes.
+2. Envia `/ajuda` para consultar os comandos e o guia completo. A resposta chega na próxima execução, prevista a cada 5 minutos, podendo atrasar.
+3. Envia `/estado` para consultar o estado e a hora da última recolha. Uma consulta bem-sucedida não significa que exista uma oportunidade de entrada.
+4. Envia `/posicoes`. As posições de testes são **simuladas**; não compraste nem vendeste qualquer ativo durante a configuração. Uma posição encerrada tem saldo zero no registo.
 5. Nas Definições do iPhone, confirma que o Telegram pode apresentar notificações. A receção no Telegram Web foi verificada; a apresentação de notificações push no teu iPhone ainda precisa desta confirmação.
 
 ## Quando chegar um alerta
@@ -18,7 +18,19 @@ Abre [Memecoin Radar Pro no Telegram](https://t.me/MemecoinRadarPro_7F3A_bot). A
 
 **C — Risco:** há comportamento anormal ou faltam dados. Um preço ausente não foi transformado em zero, e um sinal de mercado não comprova fraude nem segurança.
 
-Confirma sempre **rede e contrato completos**. `Ver gráfico` abre o par observado; `Abrir token no Phantom` deve mostrar o mesmo token na rede correta; `Copiar contrato` evita confundir símbolos iguais. Não assines transações durante a aprendizagem. Os botões têm formato validado; a abertura no teu iPhone ainda precisa de verificação pessoal.
+Confirma sempre **rede e contrato completos**. `📈 Gráfico` abre o par observado; `👛 Abrir no Phantom` deve mostrar o mesmo token na rede correta; `📋 Copiar contrato` evita confundir símbolos iguais. `🔎 Explicar os dados` dá a segunda camada de informação. Não assines transações durante a aprendizagem. Os botões têm formato validado; a abertura no teu iPhone ainda precisa de verificação pessoal.
+
+## Se entrares só em algumas moedas
+
+Um alerta não cria uma posição. Usa «👀 Só acompanhar» se quiseres apenas observar. Para aprender usa «🧪 Simular». Se já compraste manualmente, «📝 Já comprei» pede preço de entrada, quantidade recebida, taxa, limite de perda e objetivo, numa mensagem com cinco linhas. Aceita vírgula decimal. Não envia ordens.
+
+Cada posição aberta continua a ser verificada, mesmo que recebas novos alertas de outras moedas. Os avisos de limite de perda, objetivo e risco são separados por posição. Há também resumos das posições abertas no máximo a cada seis horas. Podes ter até 30 posições abertas; uma moeda nova não substitui as anteriores.
+
+Depois de venderes manualmente, abre `/posicoes` e usa «📝 Registar venda». Podes registar uma parcela ou tudo. Só com saldo zero deixa de ser acompanhada como posição aberta. `🎯 Alterar níveis` atualiza os teus preços de referência; não coloca uma ordem na carteira. `/saidas` explica os limites e as falhas possíveis.
+
+## Ajuda dentro do Telegram
+
+`/comprar`, `/vender`, `/depositar` e `/retirar` explicam os passos para a carteira e a diferença entre trocar um token, receber outro criptoativo e levantar euros. Começa sem fundos reais. `/noticias` mostra os RSS que responderam e as limitações; não cobre toda a Internet nem redes sociais.
 
 ## A tua primeira simulação
 

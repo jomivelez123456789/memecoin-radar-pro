@@ -24,10 +24,15 @@ def evaluate(s, config, previous=None, tracked=False, positions=()):
             risk.append("queda de liquidez entre observações do mesmo par")
     if tracked and risk:
         exits.extend(reason for reason in risk if not reason.startswith("subida extrema"))
+    exit_events = []
     for p in positions:
         price = s.get("price")
         if price is not None and (price <= p["stop"] or price >= p["take"]):
             exits.append(f"posição {p['id']} ({p['mode']}): nível de referência atingido")
+            exit_events.append({"position_id": p["id"], "kind": "stop" if price <= p["stop"] else "take",
+                                "reason": "a cotação desceu até ao limite de perda que registaste" if price <= p["stop"] else "a cotação atingiu o objetivo que registaste"})
+        elif tracked and any(not reason.startswith("subida extrema") for reason in risk):
+            exit_events.append({"position_id": p["id"], "kind": "risk", "reason": "; ".join(risk)})
     checks = {
         "liquidez": s.get("liquidity") is not None and s["liquidity"] >= config["min_liquidity_usd"],
         "volume": s.get("volume_h1") is not None and s["volume_h1"] >= config["min_volume_h1"],
@@ -41,6 +46,6 @@ def evaluate(s, config, previous=None, tracked=False, positions=()):
     score = sum(12.5 for value in checks.values() if value)
     # All guards are mandatory even if the score threshold is lowered.
     entry = all(checks.values()) and score >= config["entry_score"] and not risk and not exits
-    return {"entry": entry, "risk": risk, "exits": exits, "score": score,
+    return {"entry": entry, "risk": risk, "exits": exits, "exit_events": exit_events, "score": score,
             "buy_ratio": ratio, "relative_volume": relative, "missing": missing,
             "checks": checks, "risk_class": "MUITO ELEVADO" if risk or missing else "ELEVADO — contrato não auditado"}

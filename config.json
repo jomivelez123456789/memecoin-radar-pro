@@ -15,5 +15,6 @@
   "cooldown_hours": 6,
   "max_alerts_per_run": 8,
   "signal_watch_hours": 48,
-  "max_tracked_tokens": 100
+  "max_tracked_tokens": 100,
+  "position_update_hours": 6
 }

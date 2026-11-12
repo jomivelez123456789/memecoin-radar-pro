@@ -269,7 +269,7 @@ class RadarTests(unittest.TestCase):
         self.assertNotIn("upload-artifact", workflow); self.assertNotIn("actions/cache", workflow)
         self.assertNotIn("pull_request", workflow)
         self.assertIn("cancel-in-progress: false", workflow)
-        self.assertIn("cron: '7,22,37,52 * * * *'", workflow)
+        self.assertIn("cron: '2-59/5 * * * *'", workflow)
 
     def test_pool_younger_than_day_has_no_full_volume_baseline(self):
         s = sample(); s["pool_age_hours"] = 10

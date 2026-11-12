@@ -13,5 +13,6 @@ Verificação em 12/11/2026. Preços, limites, interfaces e disponibilidade regi
 - [Jupiter — documentação oficial](https://dev.jup.ag/): infraestrutura de agregação/swaps. Não se assume negociação sem custos nem é utilizada a API de execução.
 - [Coinbase — swaps em DEX](https://help.coinbase.com/en-ca/wallet/getting-started/dex-swap): carteira distinta da exchange, taxas até 1% e possíveis custos adicionais.
 - [Cryptography — documentação](https://cryptography.io/en/50.0.2/): biblioteca de cifragem utilizada, versão fixada e instalada a partir do PyPI.
+- RSS públicos de [Cointelegraph](https://cointelegraph.com/rss), [Decrypt](https://decrypt.co/feed) e [CoinDesk](https://www.coindesk.com/arc/outboundfeeds/rss/): títulos e links, sem reprodução de artigos completos. Na atualização de experiência, os dois primeiros responderam; CoinDesk não respondeu ao cliente. Disponibilidade não garante veracidade editorial.
 
 Os hashes das Actions foram comparados com as referências oficiais da API GitHub e estão registados em `LIVE_CHECK.json`. Os testes unitários usam dados sintéticos identificados como exemplos e não são prova de eficácia de trading.

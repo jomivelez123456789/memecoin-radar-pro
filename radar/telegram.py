@@ -14,6 +14,7 @@ def stamp(value):
 
 
 def alert(s, analysis, category, reasons, config):
+    from .views import money, percent, token_buttons
     link = links(s["chain"], s["address"], s.get("pair"))
     observed = stamp(s["observed_at"])
     if category.startswith("A"):
@@ -23,20 +24,31 @@ def alert(s, analysis, category, reasons, config):
         invalidation = "reavaliar se o preço voltar entre os níveis definidos e a liquidez recuperar; confirmar dados atuais."
     else:
         invalidation = "reavaliar com dados completos e atividade normalizada; riscos contratuais continuam desconhecidos."
-    text = (f"<b>{category}</b>\n{html.escape(s['name'])} ({html.escape(s['symbol'])}) · {s['chain']}\n"
-            f"<code>{s['address']}</code>\n"
-            f"Preço observado: ${fmt(s['price'])} · 1h: {fmt(s['change_h1'], '%')}\n"
-            f"Volume 1h: ${fmt(s['volume_h1'])} · Liquidez: ${fmt(s['liquidity'])}\n"
-            f"Score: {analysis['score']:g}/100 · Compras: {fmt(analysis['buy_ratio'] * 100 if analysis['buy_ratio'] is not None else None, '%')}\n"
-            f"RVOL: {fmt(analysis['relative_volume'])} · Risco: {analysis['risk_class']}\n"
-            f"Motivo: {html.escape('; '.join(reasons))}\n"
-            f"Invalidação: {invalidation}\n"
-            f"{observed} · consulta à API; última negociação não confirmada.\n"
-            "Sem garantia de rentabilidade. Contrato, holders, mint/freeze e venda não verificados.\n"
-            f"Detalhes: <code>/detail {s['chain']} {s['address']}</code>")
-    buttons = [[{"text": "Ver gráfico", "url": link["chart"]},
-                {"text": "Abrir token no Phantom", "url": link["app"]}],
-               [{"text": "Copiar contrato", "copy_text": {"text": s["address"]}}]]
+    if category.startswith("A"):
+        heading = "🟡 POSSÍVEL ENTRADA — para analisares"
+        explanation = "Há mais atividade e pressão compradora, com os filtros de mercado cumpridos. Isto não prova que a moeda seja segura nem que vá subir."
+        action = "Começa por «🧪 Simular». Se comprares manualmente, regista em «📝 Já comprei»; só assim fica como uma posição tua."
+    elif category.startswith("B"):
+        heading = "🟠 MOEDA EM OBSERVAÇÃO — condições pioraram"
+        explanation = "; ".join(reasons)
+        action = "Não há uma compra tua registada neste aviso. É só observação, não um pedido para vender algo que não tens. Se compraste manualmente, regista-a; /posicoes mostra apenas o que registaste."
+    else:
+        heading = "🔴 ATENÇÃO — risco observado"
+        explanation = "; ".join(reasons)
+        action = "Evita decidir à pressa. Confirma os dados e lê as limitações antes de assinar qualquer transação."
+    text = (f"<b>{heading}</b>\n🪙 {html.escape(s['name'])} ({html.escape(s['symbol'])}) · {s['chain']}\n\n"
+            f"💡 <b>Em palavras simples:</b> {html.escape(explanation)}\n"
+            f"📍 Preço observado: <b>{money(s['price'])}</b>\n"
+            f"📊 Na última hora: {percent(s['change_h1'])}\n"
+            f"💧 Liquidez: {money(s['liquidity'])} — recursos reportados para trocas, sem garantia de venda.\n"
+            f"🔄 Volume 1h: {money(s['volume_h1'])} — valor negociado, não lucro.\n\n"
+            f"🧭 <b>O que fazer:</b> {action}\n"
+            f"❗ Risco {analysis['risk_class'].lower()}. Contrato, holders, mint/freeze e possibilidade de vender não verificados.\n"
+            f"↩️ Quando reavaliar: {invalidation}\n"
+            f"🕒 {observed} · hora da consulta; última negociação não confirmada.\n"
+            "Sem garantia de rentabilidade.\n"
+            f"📋 Rede: {s['chain']} · contrato completo:\n<code>{s['address']}</code>")
+    buttons = token_buttons(s)
     return {"text": text, "buttons": buttons, "expires_at": s["observed_at"] + 1800}
 
 
@@ -65,7 +77,11 @@ class Telegram:
 
     def updates(self, offset):
         return self.call("getUpdates", {"offset": offset, "limit": 100, "timeout": 0,
-                                       "allowed_updates": ["message"]})
+                                       "allowed_updates": ["message", "callback_query"]})
+
+    def answer(self, callback_id):
+        return self.call("answerCallbackQuery", {"callback_query_id": callback_id,
+                        "text": "Pedido processado pelo radar.", "show_alert": False}, retry=False)
 
     def authorized(self, message):
         return (str(message.get("chat", {}).get("id")) == self.chat

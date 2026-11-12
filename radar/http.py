@@ -12,12 +12,13 @@ class ApiError(RuntimeError):
 
 class Http:
     HOSTS = {"api.dexscreener.com": 0.3, "api.geckoterminal.com": 2.1,
-             "api.telegram.org": 1.1, "api.github.com": 0.3}
+             "api.telegram.org": 1.1, "api.github.com": 0.3,
+             "www.coindesk.com": 1.0, "cointelegraph.com": 1.0, "decrypt.co": 1.0}
 
     def __init__(self):
         self.last = {}
 
-    def json(self, url, payload=None, headers=None, method=None, retry=True):
+    def json(self, url, payload=None, headers=None, method=None, retry=True, raw=False):
         host = urlsplit(url).hostname
         if urlsplit(url).scheme != "https" or host not in self.HOSTS:
             raise ApiError("Destino HTTP não autorizado")
@@ -35,7 +36,7 @@ class Http:
                     body = response.read(8_000_001)
                     if len(body) > 8_000_000:
                         raise ApiError("Resposta demasiado grande")
-                    return json.loads(body)
+                    return body if raw else json.loads(body)
             except urllib.error.HTTPError as error:
                 if retry and (error.code == 429 or error.code >= 500) and attempt < 2:
                     try:
@@ -52,6 +53,10 @@ class Http:
                     time.sleep(2 ** (attempt + 1))
                     continue
                 raise ApiError(f"{host}: indisponível ou resposta inválida") from None
+
+    def text(self, url):
+        return self.json(url, headers={"Accept": "application/rss+xml, application/xml"},
+                         retry=False, raw=True).decode("utf-8")
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):

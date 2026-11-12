@@ -19,11 +19,15 @@ Os parâmetros estão em `config.json`. Altera-os com cuidado e volta a executar
 | A — Possível entrada | Cumpriu todos os filtros, sem risco observado nos campos disponíveis. Contrato não auditado; risco continua elevado. |
 | B — Alerta de saída | Token acompanhado/sinalizado apresenta queda de preço de pelo menos 15%/1h, liquidez abaixo do mínimo, perda de pelo menos 40% de liquidez entre duas observações do mesmo par, ou uma posição atinge stop/objetivo registado. |
 | C — Alerta de risco | Token acompanhado sobe acima de 35%/1h, ou há ausência de dados de tokens acompanhados. Não comprova fraude. Riscos de descida que também justificam saída são apresentados como B para evitar duplicação. |
-| D — Tendência emergente | Não implementada nesta versão. Nenhum acesso a redes sociais é anunciado ou simulado. |
+| D — Contexto de notícia | Um RSS recente menciona o contrato completo e a rede de um token observado e existe atividade crescente sem os riscos de mercado filtrados. Não verifica a veracidade da notícia, não prova causalidade nem ligação oficial e não altera o score. |
 
-Entradas não criam posições. Tokens com sinal A ficam acompanhados durante 48h desde o sinal; volta a haver acompanhamento se novo A for emitido. Uma posição aberta ou `/watch` mantém o acompanhamento independentemente desse prazo. O cooldown por token/categoria é de seis horas e pode suprimir alertas repetidos mesmo que a condição continue presente. Não há escalada especial para novos limiares durante esse período: consulta manualmente posições.
+Entradas não criam posições. Tokens com sinal A são candidatos a acompanhamento por 48h, dentro do limite de capacidade, dando prioridade aos sinais mais recentes. Posições abertas e até 30 tokens manuais têm prioridade e não são substituídos por novas descobertas. Uma posição aberta continua acompanhada até o saldo registado chegar a zero. «Só acompanhar» não significa compra.
 
-Por execução há até oito alertas de mercado, com saídas primeiro. Tokens sem cotação geram um aviso agregado, no máximo a cada seis horas; confirmações de comandos e mensagem diária são adicionais. O limite pode adiar sinais de menor prioridade. A fila tenta entrega posterior, sem garantia de prazo. Sinais de mercado em fila com mais de 30 minutos são descartados para evitar entregar uma indicação antiga como atual; o cooldown pode continuar ativo. Pode haver duplicação numa falha ambígua.
+O cooldown de alertas gerais por token/categoria é de seis horas. Nas posições, o aviso é separado por ID de posição, tipo (limite, objetivo ou risco) e versão dos níveis. Assim, atingir um objetivo depois de um limite não fica escondido pelo aviso anterior e outra posição na mesma moeda tem o seu próprio controlo. Repetições do mesmo tipo ainda podem ser suprimidas. Alterar os níveis volta a permitir avaliação dos novos níveis.
+
+Cada posição aberta recebe também um resumo periódico no máximo a cada seis horas, sujeito à disponibilidade e limite de mensagens. Ausência de novo aviso não prova segurança nem recomenda manter. O resultado aberto é teórico, deduz a parte proporcional da taxa de entrada e não inclui taxa futura de saída/desvio de execução. Não há sincronização com carteiras.
+
+Por execução há até oito alertas/resumos, com avisos de saída das posições primeiro. Notícias têm no máximo dois avisos por ciclo e só usam espaço restante. Tokens sem cotação geram um aviso agregado, no máximo a cada seis horas; confirmações de comandos e mensagem diária são adicionais. O limite pode adiar avisos de menor prioridade. A fila tenta entrega posterior, sem garantia de prazo. Sinais de mercado em fila com mais de 30 minutos são descartados para evitar entregar uma indicação antiga como atual; o cooldown pode continuar ativo. Pode haver duplicação numa falha ambígua.
 
 ## Cobertura e fontes
 
@@ -59,8 +63,10 @@ Na cloud: chave Fernet em Actions Secrets; estado comprimido e autenticado/cifra
 
 ## Expansão prevista
 
-Notícias só através de RSS/APIs autorizadas com URL, hora, fonte, tema e grau de correspondência por contrato; uma notícia sobre GTA 6 não prova ligação oficial de um token ao jogo. Nenhuma associação automática só pelo símbolo deve gerar uma recomendação.
+RSS públicos configurados: Cointelegraph, Decrypt e CoinDesk. Na verificação real desta atualização, Cointelegraph e Decrypt responderam e CoinDesk ficou indisponível. O estado de cada fonte é mostrado em `/noticias`; uma falha não interrompe alertas de mercado. São consultados no máximo de 30 em 30 minutos. Guardam-se títulos, links, hora de publicação indicada pela fonte e menções explícitas a redes/contratos; não se copiam artigos completos.
 
-X, Telegram público, Reddit, TikTok, Instagram e YouTube não são monitorizados nesta versão. Disponibilidade, autorização e limites devem ser avaliados antes de criar cada integração. Não há scraping de conteúdos privados nem contorno de restrições. Categoria D deve cruzar notícia verificada com atividade de mercado observada, não substituir verificação do token.
+A ligação a um token exige endereço completo e rede no texto disponibilizado pelo RSS, juntamente com atividade crescente nos dados de mercado. Títulos podem estar errados ou ser incompletos; não há verificação independente dos factos nem leitura de toda a Internet. Uma notícia sobre GTA 6 não prova ligação oficial de um token ao jogo. Uma correspondência por nome ou símbolo nunca basta. Não há prémio no score por notícias.
+
+X, Telegram público, Reddit, TikTok, Instagram e YouTube não são monitorizados nesta versão. Disponibilidade, autorização e limites devem ser avaliados antes de criar cada integração. Não há scraping de conteúdos privados nem contorno de restrições. A categoria D fornece contexto de uma fonte identificada, não uma recomendação de compra.
 
 Prioridades seguintes: ativação real, confirmação de links iPhone, auditoria on-chain gratuita com estados desconhecidos explícitos, exportação e avaliação de sinais, e só depois tendências e imagens.

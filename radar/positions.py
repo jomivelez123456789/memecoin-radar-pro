@@ -35,7 +35,7 @@ def close(data, position_id, price, quantity, fee, now):
     if quantity > p["remaining"]:
         raise ValueError("Quantidade superior ao saldo registado")
     pnl = (price - p["entry"]) * quantity - p["entry_fee"] * quantity / p["quantity"] - fee
-    if number(pnl) is None:
+    if number(pnl) is None or number(p["realized_pnl"] + pnl) is None:
         raise ValueError("Resultado inválido")
     p["remaining"] = max(0, p["remaining"] - quantity)
     p["realized_pnl"] += pnl

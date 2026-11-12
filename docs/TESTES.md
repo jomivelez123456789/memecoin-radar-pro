@@ -1,5 +1,13 @@
 # Registo de validação — 12/11/2026
 
+## Atualização de experiência e acompanhamento
+
+**83 testes locais passaram** após acrescentar mensagens simples, botões, formulários em português, resumos por posição, avisos independentes por posição/nível e RSS. A suite inclui os 48 testes anteriores e 35 casos adicionais: formulários com vírgulas decimais, validação atómica, venda parcial/total, alteração de níveis, cancelamentos antigos, botões expirados, autorização e repetição de callbacks, compatibilidade do estado existente, prioridade das posições perante novos sinais, limites de mensagens e proteção de XML/links/notícias.
+
+Teste real de notícias: Cointelegraph e Decrypt responderam; CoinDesk foi marcado indisponível. Foram retidos 40 títulos/links recentes, sem copiar artigos nem associar moedas pelo símbolo. Esta recolha não valida a veracidade dos títulos ou uma estratégia de lucro.
+
+Publicação e teste real dos novos botões/formulários são verificados durante a entrega desta atualização; o histórico abaixo descreve a primeira versão já validada.
+
 ## Testes locais concluídos
 
 **48 testes automáticos passaram**, sem chamadas externas, em Python 3.14.5 no Windows. A sintaxe de todos os módulos/scripts foi verificada. Os mesmos testes passaram também em Python 3.12 no GitHub: [execução remota concluída com sucesso](https://github.com/jomivelez123456789/memecoin-radar-pro/actions/runs/43264568600), commit `841a066`.
