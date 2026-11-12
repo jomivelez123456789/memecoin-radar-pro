@@ -2,7 +2,7 @@
 
 ## Testes locais concluídos
 
-**48 testes automáticos passaram**, sem chamadas externas, em Python 3.14.5 no Windows. A sintaxe de todos os módulos/scripts foi verificada. O workflow está preparado para repetir os testes com Python 3.12 no GitHub; essa execução remota ainda não foi feita.
+**48 testes automáticos passaram**, sem chamadas externas, em Python 3.14.5 no Windows. A sintaxe de todos os módulos/scripts foi verificada. Os mesmos testes passaram também em Python 3.12 no GitHub: [execução remota concluída com sucesso](https://github.com/jomivelez123456789/memecoin-radar-pro/actions/runs/43264568600), commit `841a066`.
 
 Cobertura funcional: indicadores e limites, dados ausentes, volume relativo sem histórico suficiente, entrada, saída por deterioração, níveis de posições simuladas, risco de subida anormal, queda de liquidez apenas no mesmo par, limites de lotes de API, seleção de pares, identificação de tokens/redes, links CAIP-19, mensagem escapada e tamanho, cópia de contrato, autorização por utilizador e conversa privada, comandos antigos ignorados, comandos sem duplicação, gravação/recuperação, bloqueio local, fila após falha e descarte de sinais expirados, vendas parciais e P/L, prevenção de venda superior ao saldo, cifragem/autenticação, recuperação cloud simulada, recusa de repositório privado e de estado ausente sem inicialização, erros sem token e respeito pelo Retry-After limitado.
 
@@ -23,14 +23,14 @@ Executado também o modo de ensaio completo com mercado real: 16 observações, 
 ## Validações que precisam da configuração do utilizador
 
 1. Criar o bot e confirmar entrega real da mensagem de teste no iPhone.
-2. Publicar o repositório e configurar os segredos.
+2. Configurar os segredos no repositório já publicado e só depois reativar o workflow `Memecoin Radar`.
 3. Executar o workflow remoto, confirmar gravação/recuperação em duas execuções consecutivas e processamento de comandos.
 4. Testar os botões no Phantom instalado no iPhone, confirmando rede e endereço completos. Validação de formato não equivale a um teste no dispositivo.
 5. Criar uma simulação e registar venda parcial/total pelo Telegram.
 6. Confirmar uma execução remota posterior com o computador desligado.
 7. Rever as respostas do utilizador às perguntas finais da formação antes de considerar dinheiro real.
 
-Estes passos estão pendentes; **o bot ainda não está ativo no Telegram nem no GitHub**. Não se enviou nem executou qualquer transação.
+Estes passos estão pendentes; **o código está publicado, mas a monitorização ainda não está ativa no Telegram/GitHub**. O workflow de testes está ativo; o workflow do radar foi desativado até configurar os segredos. Não se enviou nem executou qualquer transação.
 
 ## Repetir
 

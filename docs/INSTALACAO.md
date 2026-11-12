@@ -64,7 +64,7 @@ O `GITHUB_TOKEN` é criado automaticamente pelo GitHub para cada execução; nã
 
 ## 6. Ativar e comprovar
 
-1. Em `Actions`, confirma que os testes automáticos terminaram com sucesso.
+1. Em `Actions`, confirma que os testes automáticos terminaram com sucesso. Depois de configurar todos os segredos, abre `Memecoin Radar` e escolhe `Enable workflow`: o radar foi deixado desativado enquanto falta a configuração pessoal.
 2. Abre `Memecoin Radar > Run workflow`. Na **primeira execução apenas**, assinala `initialize` e executa na branch `main`.
 3. Confirma a execução verde, a criação da branch `radar-state` com `state.enc` e a mensagem diária de funcionamento no Telegram.
 4. Envia `/health` e aguarda a próxima execução. Confirma a resposta e a hora da observação. O comando não recebe resposta instantânea.

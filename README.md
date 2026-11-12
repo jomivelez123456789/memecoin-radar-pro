@@ -7,7 +7,7 @@ Monitorização experimental em Python, em português europeu. **Não compra, ve
 - Recolha real de DexScreener e descoberta complementar de pools no GeckoTerminal: verificadas.
 - Motor de filtros, alertas A/B/C, lista manual, posições simuladas/reais registadas manualmente, vendas parciais e histórico: implementados.
 - Mensagens Telegram com gráfico, token no Phantom, contrato copiável e `/detail`: implementadas; entrega num Telegram real depende da configuração pessoal.
-- GitHub Actions de 15 em 15 minutos e persistência cifrada: preparados, **ainda não publicados nem ativados numa conta GitHub**.
+- Código e workflows publicados no GitHub; testes remotos concluídos com sucesso. Agendamento de 15 em 15 minutos e persistência cifrada preparados, **com o workflow do radar desativado até configurar o Telegram e os segredos**.
 - Notícias e categoria D, auditoria on-chain e imagens de gráficos: melhorias futuras, sem acesso fictício a plataformas.
 
 ## Começar
