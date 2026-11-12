@@ -7,17 +7,19 @@ Monitorização experimental em Python, em português europeu. **Não compra, ve
 - Recolha real de DexScreener e descoberta complementar de pools no GeckoTerminal: verificadas.
 - Motor de filtros, alertas A/B/C, lista manual, posições simuladas/reais registadas manualmente, vendas parciais e histórico: implementados.
 - Mensagens Telegram com gráfico, token no Phantom, contrato copiável e `/detail`: implementadas; entrega num Telegram real depende da configuração pessoal.
-- Código e workflows publicados no GitHub; testes remotos concluídos com sucesso. Agendamento de 15 em 15 minutos e persistência cifrada preparados, **com o workflow do radar desativado até configurar o Telegram e os segredos**.
+- Código e workflows publicados no GitHub; testes remotos e duas execuções reais do radar concluídos com sucesso. Telegram configurado e agendamento de 15 em 15 minutos ativado, com histórico cifrado.
 - Notícias e categoria D, auditoria on-chain e imagens de gráficos: melhorias futuras, sem acesso fictício a plataformas.
 
 ## Começar
+
+Se estás a usar a instalação já configurada, começa pelo [guia rápido](docs/UTILIZACAO_RAPIDA.md). Os passos abaixo servem também para reproduzir a instalação.
 
 1. Experimenta [INICIAR.cmd](INICIAR.cmd): consulta mercado real sem enviar mensagens ou usar dinheiro.
 2. Segue [Instalação e ativação](docs/INSTALACAO.md).
 3. Lê [Formação prática](docs/FORMACAO.md) e faz a simulação antes de considerar dinheiro real.
 4. Consulta [Regras e limitações](docs/REGRAS_E_LIMITACOES.md) e [Validação](docs/TESTES.md).
 
-A pasta local já contém um ambiente Python preparado. Noutro computador é necessário instalar Python e preparar o ambiente de acordo com o guia.
+A instalação desta entrega usa [@MemecoinRadarPro_7F3A_bot](https://t.me/MemecoinRadarPro_7F3A_bot), com comandos limitados ao proprietário. O código público não permite consultar posições ou controlar o bot sem os segredos. Noutro computador é necessário instalar Python e preparar o ambiente de acordo com o guia.
 
 ## Utilização após ativação
 

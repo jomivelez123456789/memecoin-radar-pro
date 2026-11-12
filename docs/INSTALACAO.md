@@ -1,5 +1,9 @@
 # Instalar e ativar
 
+## Estado da instalação desta entrega
+
+Código publicado em `jomivelez123456789/memecoin-radar-pro`. Bot `@MemecoinRadarPro_7F3A_bot` criado, credenciais guardadas em Actions Secrets e agendamento ativado. Duas execuções cloud concluíram a recolha real e a persistência cifrada; a conversa privada recebeu confirmação de funcionamento, respostas a comandos e um alerta de saída de uma posição exclusivamente simulada. As instruções abaixo permitem reproduzir a instalação; não cries outro bot nem substituas segredos sem necessidade.
+
 ## 1. O que já está preparado neste computador
 
 O código e o ambiente Python estão na pasta `C:\Users\User\Desktop\MEMECOINS AI`. Abre `INICIAR.cmd` com duplo clique para consultar o mercado sem Telegram e sem transações. Uma resposta com `observations` superior a zero confirma recolha, não uma oportunidade nem rentabilidade.
@@ -61,6 +65,16 @@ Para criar a chave, executa **tu**, localmente, sem enviar a saída para este ch
 Copia a chave diretamente para o segredo `RADAR_STATE_KEY` e guarda uma cópia privada offline. Não a introduzas como uma variável normal. Quem tiver a chave e o estado cifrado consegue ler o histórico. Perder a chave impede recuperar o histórico; trocá-la sem migração interrompe a execução em vez de apagar dados.
 
 O `GITHUB_TOKEN` é criado automaticamente pelo GitHub para cada execução; não cries um token pessoal. O workflow pede escrita no repositório apenas para guardar o ficheiro cifrado. Pessoas com acesso de escrita podem alterar workflows e capturar segredos: não concedas esse acesso a desconhecidos. Pedidos de alteração de terceiros não recebem os segredos do radar.
+
+Nesta instalação também foi criada uma cópia local cifrada da chave do histórico: `data/state-key-backup.enc`, acompanhada de `data/backup-private.dpapi`. A chave privada desta cópia é protegida pelo Windows DPAPI para a conta Windows que a criou. Estes ficheiros não são publicados. A recuperação exige esta conta Windows; copiar os ficheiros para outro computador não garante recuperação. Não é uma cópia independente de uma falha de disco nem proteção contra alguém que já controle a tua conta Windows.
+
+Para verificar a cópia sem apresentar a chave:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\state_key_backup.py check
+```
+
+Só se precisares de recuperar o segredo, `scripts\state_key_backup.py recover` apresenta a chave no terminal local. Copia-a apenas para `RADAR_STATE_KEY` em Actions Secrets; não a partilhes nem publiques a saída.
 
 ## 6. Ativar e comprovar
 

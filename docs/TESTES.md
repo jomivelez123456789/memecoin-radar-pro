@@ -20,17 +20,24 @@ Executado `scripts/live_check.py`. Resultado reproduzível em [LIVE_CHECK.json](
 
 Executado também o modo de ensaio completo com mercado real: 16 observações, zero erros e zero sinais nessa execução. Não se afrouxaram os filtros para forçar um alerta.
 
-## Validações que precisam da configuração do utilizador
+## Integração real concluída
 
-1. Criar o bot e confirmar entrega real da mensagem de teste no iPhone.
-2. Configurar os segredos no repositório já publicado e só depois reativar o workflow `Memecoin Radar`.
-3. Executar o workflow remoto, confirmar gravação/recuperação em duas execuções consecutivas e processamento de comandos.
-4. Testar os botões no Phantom instalado no iPhone, confirmando rede e endereço completos. Validação de formato não equivale a um teste no dispositivo.
-5. Criar uma simulação e registar venda parcial/total pelo Telegram.
-6. Confirmar uma execução remota posterior com o computador desligado.
-7. Rever as respostas do utilizador às perguntas finais da formação antes de considerar dinheiro real.
+- [Primeira execução do radar](https://github.com/jomivelez123456789/memecoin-radar-pro/actions/runs/43270113986): sucesso, 16 observações válidas e confirmação real recebida na conversa privada Telegram.
+- [Segunda execução](https://github.com/jomivelez123456789/memecoin-radar-pro/actions/runs/43270396493): sucesso, recuperação do estado cifrado, processamento de `/help`, `/health` e criação de uma posição simulada.
+- Alerta B recebido no Telegram com rede, contrato, dados de mercado, motivo explicitamente simulado e botões de gráfico, Phantom e cópia do contrato. O nível da posição fictícia foi escolhido para testar o aviso; não corresponde a uma compra real nem valida uma estratégia.
+- Ficheiro remoto `state.enc` confirmado como cifrado; valores das credenciais não são publicados no código nem neste relatório.
+- Cópia local da chave cifrada, com chave privada protegida pelo Windows DPAPI: geração, recuperação e validação de uma chave Fernet verificadas sem mostrar o segredo.
+- Após o teste real, as mensagens de estado foram simplificadas e o link de formação foi corrigido. Os 48 testes passaram novamente localmente e no GitHub no commit `68e6819`.
+- Duas vendas fictícias de metade da posição foram processadas numa execução posterior. O bot confirmou o saldo final zero, o resultado simulado e o estado de funcionamento com datas legíveis. A posição de teste ficou encerrada; nenhuma carteira foi utilizada.
+- [Terceira execução do radar](https://github.com/jomivelez123456789/memecoin-radar-pro/actions/runs/43271016640): sucesso, incluindo processamento das vendas simuladas e nova gravação cifrada.
 
-Estes passos estão pendentes; **o código está publicado, mas a monitorização ainda não está ativa no Telegram/GitHub**. O workflow de testes está ativo; o workflow do radar foi desativado até configurar os segredos. Não se enviou nem executou qualquer transação.
+## Validações ainda pendentes
+
+1. Confirmar visualização das mensagens no iPhone e abertura dos botões no Phantom instalado, confirmando rede e endereço completos. A receção no Telegram Web não comprova notificações push no iPhone.
+2. Confirmar uma execução disparada pelo agendamento e uma execução posterior com o computador desligado.
+3. Rever as respostas do utilizador às perguntas finais da formação antes de considerar dinheiro real.
+
+**Monitorização configurada e ativada, com execuções cloud e entrega Telegram verificadas.** As verificações adicionais acima continuam pendentes; o agendamento não oferece uma garantia de disponibilidade. Não se enviou nem executou qualquer transação.
 
 ## Repetir
 
