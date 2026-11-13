@@ -6,7 +6,7 @@ import unittest
 from email.utils import formatdate
 from pathlib import Path
 from unittest.mock import patch
-from radar.app import load_config, scan
+from radar.app import load_config, scan, note_gap
 from radar.commands import consume, process, enqueue
 from radar.education import page
 from radar.engine import evaluate
@@ -217,6 +217,24 @@ class ExperienceTests(unittest.TestCase):
         with patch.dict(os.environ, {"TELEGRAM_BOT_TOKEN": "test", "TELEGRAM_CHAT_ID": "1"}):
             Telegram(fake).updates(1)
         self.assertIn("callback_query", fake.payload["allowed_updates"])
+
+    def test_observed_gap_produces_clear_warning_without_positions(self):
+        self.state.data["health"]["last_attempt"] = NOW - 3600
+        note_gap(self.state, NOW)
+        self.assertEqual(self.state.data["health"]["last_gap_seconds"], 3600)
+        self.assertIn("60 minutos", self.state.data["outbox"][0]["text"])
+        self.assertIn("não consegue avisar", self.state.data["outbox"][0]["text"])
+
+    def test_gap_notice_does_not_repeat_in_same_recovery(self):
+        self.state.data["health"]["last_attempt"] = NOW - 3600
+        note_gap(self.state, NOW)
+        note_gap(self.state, NOW + 10)
+        self.assertEqual(len(self.state.data["outbox"]), 1)
+
+    def test_stale_health_is_not_presented_as_currently_healthy(self):
+        self.state.data["health"] = {"status": "ok", "last_attempt": NOW - 3600}
+        result = process("/estado", self.state, self.config, NOW)
+        self.assertIn("sem verificação recente", result)
 
 
 def feed(title="Notícia", description="", url="https://cointelegraph.com/news/test", date=NOW):

@@ -44,7 +44,7 @@ def token_buttons(s, register_buttons=True):
 def position_message(p, s, heading="💼 Resumo da tua posição", reason=None):
     if s is None:
         s = {}
-    name = html.escape(s.get("name") or p["key"].split(":", 1)[0])
+    name = html.escape(s.get("name") or "Moeda registada — a aguardar primeira cotação")
     if s.get("symbol"):
         name += " (" + html.escape(s["symbol"]) + ")"
     price = s.get("price")

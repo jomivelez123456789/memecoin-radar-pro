@@ -1,12 +1,20 @@
-# Registo de validação — 12/11/2026
+# Registo de validação — 12 e 13/11/2026
 
 ## Atualização de experiência e acompanhamento
 
-**83 testes locais passaram** após acrescentar mensagens simples, botões, formulários em português, resumos por posição, avisos independentes por posição/nível e RSS. A suite inclui os 48 testes anteriores e 35 casos adicionais: formulários com vírgulas decimais, validação atómica, venda parcial/total, alteração de níveis, cancelamentos antigos, botões expirados, autorização e repetição de callbacks, compatibilidade do estado existente, prioridade das posições perante novos sinais, limites de mensagens e proteção de XML/links/notícias.
+**86 testes Python locais e 4 testes do relógio opcional passaram.** Os 83 testes da atualização visual passaram também no GitHub no commit `8c6481f`. A suite inclui os 48 testes anteriores e casos de formulários com vírgulas decimais, validação atómica, venda parcial/total, alteração de níveis, cancelamentos antigos, botões expirados, autorização e repetição de callbacks, compatibilidade do estado existente, prioridade das posições perante novos sinais, limites de mensagens, proteção de XML/links/notícias e aviso de interrupções observadas.
 
 Teste real de notícias: Cointelegraph e Decrypt responderam; CoinDesk foi marcado indisponível. Foram retidos 40 títulos/links recentes, sem copiar artigos nem associar moedas pelo símbolo. Esta recolha não valida a veracidade dos títulos ou uma estratégia de lucro.
 
-Publicação e teste real dos novos botões/formulários são verificados durante a entrega desta atualização; o histórico abaixo descreve a primeira versão já validada.
+### Verificação real da versão visual, em 13/11/2026
+
+- [Ajuda com emojis e formulário de simulação](https://github.com/jomivelez123456789/memecoin-radar-pro/actions/runs/43339035184): sucesso e mensagens recebidas no Telegram.
+- [Registo guiado, notícias e aviso de saída individual](https://github.com/jomivelez123456789/memecoin-radar-pro/actions/runs/43339248832): sucesso. O aviso identificou explicitamente a simulação, explicou a perda estimada e mostrou níveis e botões.
+- [Botão «Registar venda»](https://github.com/jomivelez123456789/memecoin-radar-pro/actions/runs/43339433661): callback processado e formulário recebido, sem transações.
+- [Venda fictícia com vírgulas decimais e consulta de posições](https://github.com/jomivelez123456789/memecoin-radar-pro/actions/runs/43339628142): sucesso; registo encerrado e zero posições abertas. O teste não avaliou uma estratégia de lucro.
+- [Uma execução por horário foi confirmada](https://github.com/jomivelez123456789/memecoin-radar-pro/actions/runs/43323546163), às 22:50 UTC de 12/11, após uma consulta manual às 17:35. As respostas que aguardavam na fila chegaram às 22:50. Este intervalo observado de horas impede apresentar o cron do GitHub como vigilância frequente garantida.
+
+O relógio Cloudflare está preparado mas NÃO foi ativado; precisa de conta e autorização específica para uma credencial limitada. Os quatro testes desse componente são locais, com credencial fictícia e sem pedidos externos. A nota de interrupções do radar só consegue avisar quando uma execução volta a ocorrer.
 
 ## Testes locais concluídos
 
@@ -42,7 +50,7 @@ Executado também o modo de ensaio completo com mercado real: 16 observações, 
 ## Validações ainda pendentes
 
 1. Confirmar visualização das mensagens no iPhone e abertura dos botões no Phantom instalado, confirmando rede e endereço completos. A receção no Telegram Web não comprova notificações push no iPhone.
-2. Confirmar uma execução disparada pelo agendamento e uma execução posterior com o computador desligado.
+2. Melhorar e observar a regularidade do agendamento antes de depender dos avisos com dinheiro real. A existência de uma execução agendada não garante frequência, disponibilidade ou entrega. Não foi realizado um teste físico de desligar este computador durante a verificação.
 3. Rever as respostas do utilizador às perguntas finais da formação antes de considerar dinheiro real.
 
 **Monitorização configurada e ativada, com execuções cloud e entrega Telegram verificadas.** As verificações adicionais acima continuam pendentes; o agendamento não oferece uma garantia de disponibilidade. Não se enviou nem executou qualquer transação.

@@ -4,7 +4,7 @@ import re
 import uuid
 from .model import identity
 from .positions import register, close, positive
-from .views import token_ref, money, position_message, token_buttons
+from .views import token_ref, money, position_message, token_buttons, units
 from .education import page
 
 
@@ -32,7 +32,8 @@ def begin(data, kind, now, key=None, position_id=None):
         text = (f"<b>{mode}</b>\nRede: {chain}\nContrato: <code>{address}</code>\n\n"
                 "Confirma a identidade. Depois responde com UMA mensagem com estas 5 linhas, substituindo os valores por números:\n\n"
                 "Preço: ...\nQuantidade: ...\nTaxa: ...\nLimite de perda: ...\nObjetivo: ...\n\n"
-                "💵 Preço, taxa e níveis em USD. Quantidade é o número de unidades recebidas, não os euros gastos. "
+                "💵 USD significa dólares americanos, não euros. Usa essa mesma moeda de visualização na carteira, se disponível; não copies euros como se fossem dólares. "
+                "Preço, taxa e níveis em USD. Quantidade é o número de unidades recebidas, não os euros gastos. "
                 "Aceito vírgula decimal. Taxa pode ser 0. Limite deve ficar abaixo da entrada; objetivo acima.\n"
                 "🎯 São níveis para avisos, não ordens. /saidas explica; /comprar ensina a simular primeiro.\n"
                 "Só envia dados fictícios numa simulação, ou os dados reais da compra já confirmada num registo real. "
@@ -44,7 +45,7 @@ def begin(data, kind, now, key=None, position_id=None):
             raise ValueError("Posição inexistente ou encerrada")
         if kind == "sell":
             text = (f"📝 <b>Registar venda {'SIMULADA' if p['mode']=='simulada' else 'REAL já executada'}</b>\n"
-                    f"Posição <code>{p['id']}</code> · saldo registado {p['remaining']:.8g} unidades\n\n"
+                    f"Posição <code>{p['id']}</code> · saldo registado {units(p['remaining'])} unidades\n\n"
                     "Responde numa mensagem com 3 linhas:\nPreço: ...\nQuantidade vendida: ...\nTaxa: ...\n\n"
                     "Preço executado e taxa em USD; aceita vírgula decimal e taxa 0. Podes registar uma parcela. "
                     "Isto NÃO vende na carteira. /vender explica o percurso. Numa posição simulada usa valores fictícios.")

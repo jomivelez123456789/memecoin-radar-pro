@@ -5,7 +5,7 @@ import zipfile
 root = Path(__file__).resolve().parents[1]
 files = [root / name for name in ("README.md", "requirements.txt", "config.json", ".gitignore", ".gitattributes",
                                   "INICIAR.cmd", "CONFIGURAR_TELEGRAM.cmd")]
-for folder in ("radar", "tests", "scripts", "docs", ".github"):
+for folder in ("radar", "tests", "scripts", "docs", ".github", "cloudflare"):
     files.extend(p for p in (root / folder).rglob("*")
                  if p.is_file() and "__pycache__" not in p.parts and p.suffix not in (".pyc", ".key", ".enc", ".log"))
 target = root / "dist" / "memecoin-radar-pro.zip"

@@ -95,12 +95,17 @@ def process(text, state, config, now):
     if command == "/health":
         health = data["health"]
         status = {"ok": "a funcionar", "degradado": "dados incompletos", "falha": "falha na última verificação"}
+        current_status = status.get(health.get('status'), 'a aguardar primeira verificação')
+        if health.get("last_attempt") and now - health["last_attempt"] > 900:
+            current_status = "⚠️ sem verificação recente; não dependas dos avisos para uma saída urgente"
+        gap = (f"\n🔴 Interrupção observada: cerca de {max(1, health['last_gap_seconds'] // 60)} minutos, detetada em {stamp(health.get('last_gap_at'))}."
+               if health.get("last_gap_seconds") else "")
         return ("📡 <b>Estado do radar</b>\n"
-                f"Estado: {status.get(health.get('status'), 'a aguardar primeira verificação')}\n"
+                f"Estado: {current_status}\n"
                 f"Última consulta: {stamp(health.get('last_attempt'))}\n"
                 f"Última recolha com dados: {stamp(health.get('last_market_success'))}\n"
                 f"Tokens observados: {health.get('observations', 0)} · sem dados: {health.get('missing', 0)}\n"
-                f"Avisos/resumos nessa consulta: {health.get('signals', 0)}\n"
+                f"Avisos/resumos nessa consulta: {health.get('signals', 0)}{gap}\n"
                 "Verificações previstas de 5 em 5 minutos, sujeitas a atrasos. "
                 "Este comando descreve a verificação anterior ao processamento da mensagem.")
     return HELP

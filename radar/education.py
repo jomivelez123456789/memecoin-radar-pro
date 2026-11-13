@@ -25,6 +25,7 @@ PAGES = {
 🛑 /cancelar — cancelar um formulário
 
 ⏳ Consultas previstas a cada 5 minutos; o GitHub pode atrasá-las. Respostas e botões também aguardam uma execução. Não é um serviço em tempo real.
+💵 USD significa dólares americanos. Não mistures preços em euros com preços em dólares no registo.
 🔐 Nunca envies frases de recuperação, chaves ou palavras-passe.""",
     "comprar": """🛒 <b>Comprar: começa SEM dinheiro real</b>
 

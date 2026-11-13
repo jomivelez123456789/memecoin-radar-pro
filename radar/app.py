@@ -13,6 +13,25 @@ from .telegram import Telegram, alert
 from .views import position_message
 
 
+def note_gap(state, now):
+    """Report an observed monitoring gap; cannot warn while the service is stopped."""
+    health = state.data["health"]
+    last = health.get("last_attempt")
+    if not last or now - last <= 900:
+        return
+    gap = int(now - last)
+    health.update({"last_gap_seconds": gap, "last_gap_at": now})
+    if now - health.get("gap_notice_at", 0) < 1800:
+        return
+    minutes = max(1, gap // 60)
+    state.data["outbox"].append({"text": "🔴 HOUVE UM INTERVALO SEM VERIFICAÇÕES\n"
+        f"A última consulta foi há cerca de {minutes} minutos. O radar só detetou o intervalo agora que voltou a executar.\n"
+        "Durante esse período, níveis de saída podem ter sido ultrapassados sem aviso. "
+        "Não uses este agendamento como proteção automática de uma posição com dinheiro real.\n"
+        "📡 /estado mostra as horas. O bot não consegue avisar enquanto estiver parado e nunca vende por ti."})
+    health["gap_notice_at"] = now
+
+
 def load_config(path="config.json"):
     config = json.loads(Path(path).read_text(encoding="utf-8"))
     if not set(config["chains"]) <= {"solana", "base", "ethereum"}:
@@ -164,6 +183,7 @@ def run(path="data/state.json", dry=False, telegram_test=False):
         try:
             if not dry:
                 telegram = Telegram(http)
+                note_gap(state, time.time())
                 if state.data["health"].get("commands_version") != 2:
                     try:
                         telegram.call("setMyCommands", {"commands": [

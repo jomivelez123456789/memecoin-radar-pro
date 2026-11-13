@@ -12,6 +12,8 @@ Monitorização experimental em Python, em português europeu. **Não compra, ve
 - RSS de Cointelegraph, Decrypt e CoinDesk, com falhas explicitamente identificadas. Notícias só são ligadas a uma moeda quando mencionam endereço completo e rede, juntamente com atividade de mercado. Não verificam a veracidade da notícia nem aumentam o score.
 - Redes sociais, auditoria on-chain e imagens de gráficos continuam fora desta versão; não existe acesso fictício a plataformas nem uma estratégia de lucro validada.
 
+**Disponibilidade:** foi observado um atraso de horas no cron GitHub. Embora esteja configurado para cinco minutos, não deve ser usado como proteção de saídas urgentes. Há um [relógio alternativo preparado, ainda não ativado](docs/RELOGIO_ALTERNATIVO.md), que requer autorização e uma conta adicional. Mantém simulações enquanto a disponibilidade não for adequada ao uso pretendido.
+
 ## Começar
 
 Se estás a usar a instalação já configurada, começa pelo [guia rápido](docs/UTILIZACAO_RAPIDA.md). Os passos abaixo servem também para reproduzir a instalação.

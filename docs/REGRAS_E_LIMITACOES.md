@@ -2,6 +2,12 @@
 
 ## Decisão experimental
 
+### Disponibilidade observada
+
+O cron está configurado para consultar de cinco em cinco minutos, mas a verificação real registou um intervalo de horas entre uma consulta manual e a execução por horário seguinte. Não é apropriado depender deste agendamento para saídas urgentes com dinheiro real. O radar regista intervalos superiores a 15 minutos e avisa quando volta a executar; não consegue avisar enquanto estiver parado. `/estado` assinala observações desatualizadas.
+
+Um [relógio externo opcional](RELOGIO_ALTERNATIVO.md) foi preparado para reduzir a dependência do cron GitHub, mas ainda não foi ativado. Exige nova conta e autorização específica; não promete disponibilidade ou lucro.
+
 Não existe uma estratégia validada. O score é uma classificação de critérios, não uma probabilidade de lucro. Os valores iniciais são parâmetros de desenvolvimento, sem adequação financeira pessoal.
 
 Cada critério vale 12,5 pontos: liquidez mínima de 50 000 USD; volume 1h mínimo de 10 000 USD; idade mínima do par de 6h; pelo menos 40 transações em 1h; fração de compras mínima de 58%; variação em 1h entre 2% e 35%; volume relativo mínimo 1,5; campos de mercado completos. **Todos os critérios são obrigatórios**; baixar `entry_score` não remove os filtros obrigatórios.
