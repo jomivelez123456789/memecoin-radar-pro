@@ -6,7 +6,7 @@
 
 O cron está configurado para consultar de cinco em cinco minutos, mas a verificação real registou um intervalo de horas entre uma consulta manual e a execução por horário seguinte. Não é apropriado depender deste agendamento para saídas urgentes com dinheiro real. O radar regista intervalos superiores a 15 minutos e avisa quando volta a executar; não consegue avisar enquanto estiver parado. `/estado` assinala observações desatualizadas.
 
-Um [relógio externo opcional](RELOGIO_ALTERNATIVO.md) foi preparado para reduzir a dependência do cron GitHub, mas ainda não foi ativado. Exige nova conta e autorização específica; não promete disponibilidade ou lucro.
+Um [relógio externo Cloudflare](RELOGIO_ALTERNATIVO.md) foi publicado no plano gratuito em 13/11/2026 para reduzir a dependência do cron GitHub. Duas análises automáticas separadas por cinco minutos e as respostas Telegram foram confirmadas em 16/11/2026. A credencial GitHub é limitada a este repositório e expira em 13/12/2026; precisa de renovação. Não promete disponibilidade ou lucro.
 
 Não existe uma estratégia validada. O score é uma classificação de critérios, não uma probabilidade de lucro. Os valores iniciais são parâmetros de desenvolvimento, sem adequação financeira pessoal.
 

@@ -10,12 +10,13 @@ export async function dispatch(env, request = fetch) {
   let response;
   try {
     response = await request(ENDPOINT, {
-      method: 'POST', redirect: 'error',
+      // Workers supports manual/follow only. Never forward authorization to a redirect.
+      method: 'POST', redirect: 'manual',
       headers: {
         'Authorization': `Bearer ${env.GITHUB_DISPATCH_TOKEN}`,
         'User-Agent': 'MemecoinRadar-Clock',
         'Accept': 'application/vnd.github+json',
-        'X-GitHub-Api-Version': '2022-11-28',
+        'X-GitHub-Api-Version': '2026-03-10',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ref: 'main', inputs: {initialize: false}}),
@@ -25,7 +26,8 @@ export async function dispatch(env, request = fetch) {
     // Do not log response bodies, headers or error objects with credentials.
     throw new Error('Não foi possível pedir a verificação ao GitHub.');
   }
-  if (response.status !== 204) {
+  // Current API returns 200 with a run id; older versions returned 204.
+  if (response.status !== 200 && response.status !== 204) {
     throw new Error(`O GitHub não aceitou o pedido de verificação (HTTP ${response.status}).`);
   }
   return true;

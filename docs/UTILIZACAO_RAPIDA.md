@@ -42,6 +42,8 @@ Antes de considerar dinheiro real, responde às perguntas finais do guia: precis
 
 ## Se o bot deixar de responder
 
+O relógio externo Cloudflare foi publicado no plano gratuito para iniciar análises a cada cinco minutos, mesmo com o computador desligado. Duas análises automáticas e as respostas no Telegram foram confirmadas em 16/11/2026. A autorização GitHub expira em **13/12/2026**; segue o [guia de renovação](RELOGIO_ALTERNATIVO.md) antes dessa data.
+
 Pode haver atraso no GitHub. Se passarem 26h sem a confirmação diária, consulta [as execuções do radar](https://github.com/jomivelez123456789/memecoin-radar-pro/actions/workflows/radar.yml). Um serviço que deixou de executar não consegue garantir que avisa da própria paragem. Não dependas apenas do bot para avaliar uma posição.
 
 Para parar verificações, usa `Disable workflow` na página acima. Isso não vende ativos nem altera saldos de carteiras.

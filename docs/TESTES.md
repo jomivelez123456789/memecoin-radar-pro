@@ -1,8 +1,8 @@
-# Registo de validação — 12 e 13/11/2026
+# Registo de validação — 12, 13 e 16/11/2026
 
 ## Atualização de experiência e acompanhamento
 
-**86 testes Python locais e 4 testes do relógio opcional passaram.** Os 83 testes da atualização visual passaram também no GitHub no commit `8c6481f`. A suite inclui os 48 testes anteriores e casos de formulários com vírgulas decimais, validação atómica, venda parcial/total, alteração de níveis, cancelamentos antigos, botões expirados, autorização e repetição de callbacks, compatibilidade do estado existente, prioridade das posições perante novos sinais, limites de mensagens, proteção de XML/links/notícias e aviso de interrupções observadas.
+**86 testes Python e 4 testes do relógio passaram localmente e no GitHub no commit `4a3681f`. Na correção de 16/11, os cinco testes atualizados do relógio passaram localmente, incluindo redirecionamentos recusados, sucesso 200/204 e erros sem credenciais.** A suite inclui os 48 testes anteriores e casos de formulários com vírgulas decimais, validação atómica, venda parcial/total, alteração de níveis, cancelamentos antigos, botões expirados, autorização e repetição de callbacks, compatibilidade do estado existente, prioridade das posições perante novos sinais, limites de mensagens, proteção de XML/links/notícias e aviso de interrupções observadas.
 
 Teste real de notícias: Cointelegraph e Decrypt responderam; CoinDesk foi marcado indisponível. Foram retidos 40 títulos/links recentes, sem copiar artigos nem associar moedas pelo símbolo. Esta recolha não valida a veracidade dos títulos ou uma estratégia de lucro.
 
@@ -14,7 +14,7 @@ Teste real de notícias: Cointelegraph e Decrypt responderam; CoinDesk foi marca
 - [Venda fictícia com vírgulas decimais e consulta de posições](https://github.com/jomivelez123456789/memecoin-radar-pro/actions/runs/43339628142): sucesso; registo encerrado e zero posições abertas. O teste não avaliou uma estratégia de lucro.
 - [Uma execução por horário foi confirmada](https://github.com/jomivelez123456789/memecoin-radar-pro/actions/runs/43323546163), às 22:50 UTC de 12/11, após uma consulta manual às 17:35. As respostas que aguardavam na fila chegaram às 22:50. Este intervalo observado de horas impede apresentar o cron do GitHub como vigilância frequente garantida.
 
-O relógio Cloudflare está preparado mas NÃO foi ativado; precisa de conta e autorização específica para uma credencial limitada. Os quatro testes desse componente são locais, com credencial fictícia e sem pedidos externos. A nota de interrupções do radar só consegue avisar quando uma execução volta a ocorrer.
+O relógio Cloudflare foi publicado em 13/11/2026 às 14:57 UTC, após autorização e configuração de acessos limitados. Workers Free e ausência de método de pagamento foram confirmados no painel. A credencial temporária de publicação, restrita a este Worker, foi revogada após publicar. A correção de 16/11 substituiu a opção de redirecionamento não suportada por `manual`, mantendo a recusa de redirecionamentos. Foram confirmadas a [primeira análise automática](https://github.com/jomivelez123456789/memecoin-radar-pro/actions/runs/43927860052) e a [segunda](https://github.com/jomivelez123456789/memecoin-radar-pro/actions/runs/43928718040), pedidas às 18:20:53 e 18:25:52 UTC, ambas concluídas com sucesso, e respostas de ajuda/estado no Telegram às 18:21 e 18:26. O estado confirmou funcionamento, 16 observações e zero ausentes. O diagnóstico temporário foi desativado e o acesso de publicação revogado. Os cinco testes desse componente usam credencial fictícia e não fazem pedidos externos. A nota de interrupções do radar só consegue avisar quando uma execução volta a ocorrer.
 
 ## Testes locais concluídos
 

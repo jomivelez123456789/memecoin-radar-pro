@@ -7,7 +7,8 @@ files = [root / name for name in ("README.md", "requirements.txt", "config.json"
                                   "INICIAR.cmd", "CONFIGURAR_TELEGRAM.cmd")]
 for folder in ("radar", "tests", "scripts", "docs", ".github", "cloudflare"):
     files.extend(p for p in (root / folder).rglob("*")
-                 if p.is_file() and "__pycache__" not in p.parts and p.suffix not in (".pyc", ".key", ".enc", ".log"))
+                 if p.is_file() and not {"__pycache__", ".wrangler", "node_modules", ".git"}.intersection(p.parts)
+                 and p.suffix not in (".pyc", ".key", ".enc", ".log"))
 target = root / "dist" / "memecoin-radar-pro.zip"
 target.parent.mkdir(exist_ok=True)
 with zipfile.ZipFile(target, "w", zipfile.ZIP_DEFLATED) as archive:
