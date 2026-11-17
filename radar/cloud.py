@@ -2,6 +2,7 @@
 import base64
 import os
 import zlib
+import time
 from pathlib import Path
 from urllib.parse import quote
 from cryptography.fernet import Fernet
@@ -19,6 +20,7 @@ class CloudState:
         self.base = "https://api.github.com/repos/" + self.repo
         self.branch = "radar-state"
         self.sha = None
+        self.stage = "configuração"
 
     def api(self, path, payload=None, method=None):
         # Mutation requests must not be repeated after ambiguous network failures.
@@ -29,10 +31,12 @@ class CloudState:
         return str(error).endswith("HTTP 404")
 
     def restore(self, path, initialize=False):
+        self.stage = "ler metadados do repositório"
         repo = self.api("")
         if repo.get("private") is not False:
             raise ValueError("Automatização autorizada apenas em repositório público para evitar consumo pago")
         try:
+            self.stage = "ler estado cifrado"
             file = self.api("/contents/state.enc?ref=" + self.branch)
         except ApiError as error:
             if not initialize or not self.not_found(error):
@@ -49,6 +53,7 @@ class CloudState:
                 raise ValueError("Estado local existente: interromper inicialização")
             return
         self.sha = file["sha"]
+        self.stage = "autenticar e recuperar estado"
         encrypted = base64.b64decode(file["content"])
         compressed = self.cipher.decrypt(encrypted)  # Authentication failure is fatal, never reset state.
         decoder = zlib.decompressobj()
@@ -59,6 +64,7 @@ class CloudState:
         Path(path).write_bytes(raw)
 
     def save(self, path):
+        self.stage = "guardar estado cifrado"
         raw = Path(path).read_bytes()
         if len(raw) > 20_000_000:
             raise ValueError("Estado excede o limite; arquivar histórico antes de continuar")
@@ -69,23 +75,48 @@ class CloudState:
                    "content": base64.b64encode(encrypted).decode()}
         if self.sha:
             payload["sha"] = self.sha
-        result = self.api("/contents/state.enc", payload, method="PUT")
+        try:
+            result = self.api("/contents/state.enc", payload, method="PUT")
+        except ApiError as error:
+            if error.status is not None and error.status not in (500, 502, 503, 504):
+                raise
+            # A timed-out write may already have succeeded. Reconcile before retrying.
+            remote = self.api("/contents/state.enc?ref=" + self.branch)
+            if base64.b64decode(remote.get("content", "")) == encrypted:
+                self.sha = remote["sha"]
+                return
+            if remote.get("sha") != self.sha:
+                raise ValueError("Estado remoto mudou; não sobrescrever") from None
+            time.sleep(2)
+            result = self.api("/contents/state.enc", payload, method="PUT")
         self.sha = result["content"]["sha"]
+
+
+def safe_failure(error, stage):
+    """Only fixed stage names, allowlisted host and status; never exception text."""
+    host = error.host if isinstance(error, ApiError) and error.host in Http.HOSTS else "origem não identificada"
+    status = error.status if isinstance(error, ApiError) and isinstance(error.status, int) else None
+    detail = f"HTTP {status}" if status is not None and 100 <= status <= 599 else "rede/resposta ou validação"
+    return f"Falha cloud ({type(error).__name__}); etapa: {stage}; serviço: {host}; {detail}. Segredos omitidos."
 
 
 def main():
     # GitHub concurrency group serializes all runs using this state branch.
     path = "data/state.json"
+    cloud = None
     try:
         cloud = CloudState()
         cloud.restore(path, os.environ.get("RADAR_INITIALIZE") == "true")
         try:
+            cloud.stage = "processar mercado e comandos"
             run(path)
         finally:
             if Path(path).exists():
+                prior_stage = cloud.stage
                 cloud.save(path)
+                cloud.stage = prior_stage
     except Exception as error:
-        print(f"Falha cloud ({type(error).__name__}); execução interrompida, segredos omitidos.")
+        print(safe_failure(error, cloud.stage if cloud else "configuração"))
         raise SystemExit(1) from None
 
 

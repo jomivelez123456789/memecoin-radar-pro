@@ -20,6 +20,13 @@ def process(text, state, config, now):
         return {"text": HELP, "buttons": [[{"text": "🛒 Aprender a comprar", "callback_data": "help:comprar"},
                      {"text": "💸 Aprender a vender", "callback_data": "help:vender"}],
                      [{"text": "🎯 Avisos de saída", "callback_data": "help:saidas"}]]}
+    if command in ("/resultados", "/teste", "/teste_iniciar", "/teste_parar"):
+        from . import paper
+        if command == "/teste_iniciar":
+            return paper.start(data, now, config)
+        if command == "/teste_parar" and data.get("paper"):
+            data["paper"]["running"] = False
+        return paper.report(data, now)
     if command[1:] in ("comprar", "vender", "depositar", "retirar", "saidas"):
         return page(command[1:])
     if command == "/cancelar":

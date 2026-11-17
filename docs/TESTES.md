@@ -1,4 +1,12 @@
-# Registo de validação — 12, 13 e 16/11/2026
+# Registo de validação — 12 a 17/11/2026
+
+## Ensaio em euros e recuperação — 17/11/2026
+
+107 testes Python e cinco testes do relógio passaram localmente. Foram acrescentados casos de lucro versus taxa de acerto, perdas, câmbio EUR/USD variável, cotação/câmbio ausentes, posições sem valor para cobrir custos de saída, custos e desvio em ambos os lados, limite de cinco posições, pausa sem apagar perdas, saída ao preço observado após um intervalo, ausência de call sem compra fictícia, segurança XML/TLS e escrita remota ambígua reconciliada antes de repetir. Cenários artificiais não contam como ganhos de mercado.
+
+A leitura real do BCE validou a referência de 16/11/2026 (1 EUR = 1,1014 USD), com TLS verificado. Em 17/11, foram consultadas 25 execuções consecutivas bem-sucedidas entre 10:56 e 12:56 UTC. As falhas de API de 16/11 às 22:26/22:31 têm mensagem antiga genérica e não permitem atribuir com certeza a causa a um fornecedor. O novo diagnóstico preserva apenas etapa, host autorizado e código HTTP; não imprime conteúdos de exceções ou credenciais.
+
+O protocolo prospetivo está em [TESTE_EUROS.md](TESTE_EUROS.md). Os exemplos manuais anteriores são excluídos. Só novas calls A efetivamente emitidas podem abrir posições na carteira fictícia; zero calls fechadas implica taxa de acerto por apurar.
 
 ## Atualização de experiência e acompanhamento
 

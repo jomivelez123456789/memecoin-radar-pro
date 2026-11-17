@@ -16,6 +16,8 @@ Monitorização experimental em Python, em português europeu. **Não compra, ve
 
 ## Começar
 
+🧪 [Teste automático em euros](docs/TESTE_EUROS.md): `/teste_iniciar` inicia 1 000 € fictícios nas novas calls A; `/resultados` mostra ganhos/perdas, rendimento do saldo e taxa de acerto separados. Sem calls fechadas, não apresenta uma taxa de sucesso inventada. Não executa transações.
+
 Se estás a usar a instalação já configurada, começa pelo [guia rápido](docs/UTILIZACAO_RAPIDA.md). Os passos abaixo servem também para reproduzir a instalação.
 
 1. Experimenta [INICIAR.cmd](INICIAR.cmd): consulta mercado real sem enviar mensagens ou usar dinheiro.

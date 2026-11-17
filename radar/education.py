@@ -15,6 +15,8 @@ PAGES = {
 5️⃣ Depois de venderes manualmente, regista a venda. Receber um alerta não fecha a posição.
 
 📚 /comprar — passos para comprar/simular
+🧪 /resultados — teste automático em euros, ganhos/perdas e acerto
+▶️ /teste_iniciar — iniciar 1 000 € fictícios; só as novas calls A
 💸 /vender — passos para vender e registar
 💳 /depositar — compreender como entram fundos
 🏦 /retirar — compreender como voltam ao banco
@@ -25,7 +27,7 @@ PAGES = {
 🛑 /cancelar — cancelar um formulário
 
 ⏳ Consultas previstas a cada 5 minutos; o GitHub pode atrasá-las. Respostas e botões também aguardam uma execução. Não é um serviço em tempo real.
-💵 USD significa dólares americanos. Não mistures preços em euros com preços em dólares no registo.
+💱 O teste automático /resultados está em euros. Os formulários manuais de compras/simulações continuam em USD (dólares); são contas separadas.
 🔐 Nunca envies frases de recuperação, chaves ou palavras-passe.""",
     "comprar": """🛒 <b>Comprar: começa SEM dinheiro real</b>
 

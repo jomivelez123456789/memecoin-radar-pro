@@ -4,13 +4,14 @@ import json
 import math
 import time
 from pathlib import Path
-from .commands import consume
+from .commands import consume, enqueue
 from .engine import evaluate
 from .http import Http, ApiError
 from .market import Market
 from .state import State
 from .telegram import Telegram, alert
 from .views import position_message
+from . import paper, fx
 
 
 def note_gap(state, now):
@@ -66,16 +67,18 @@ def scan(state, config, market, now, dry=False, news_http=None):
     active = [p for p in data["positions"] if p["remaining"] > 0]
     recent = [key for key, stamp in data["signaled"].items() if now - stamp <= config["signal_watch_hours"] * 3600]
     # Positions and manual watchlist have priority over discovery; never infer ownership from alerts.
-    owned_and_manual = list(dict.fromkeys([p["key"] for p in active] + data["watched"]))
+    owned_and_manual = list(dict.fromkeys([p["key"] for p in active] + data["watched"]
+                                        + [p["key"] for p in paper.opened(data)]))
     recent = sorted(recent, key=lambda key: data["signaled"][key], reverse=True)
     slots = max(0, config["max_tracked_tokens"] - len(owned_and_manual) - len(discovered))
     tracked = list(dict.fromkeys(owned_and_manual + [key for key in recent if key not in owned_and_manual][:slots]))
     keys = list(dict.fromkeys(tracked + discovered))[:config["max_tracked_tokens"]]
     snapshots, errors = market.fetch(keys, now)
-    candidates = []
+    candidates, analyses, paper_calls = [], {}, []
     for key, s in snapshots.items():
         positions = [p for p in active if p["key"] == key]
         a = evaluate(s, config, data["snapshots"].get(key), key in tracked, positions)
+        analyses[key] = a
         if a["exit_events"]:
             for event in a["exit_events"]:
                 p = next(p for p in positions if p["id"] == event["position_id"])
@@ -112,10 +115,16 @@ def scan(state, config, market, now, dry=False, news_http=None):
             data["cooldowns"][cooldown_key] = now
             if category.startswith("A"):
                 data["signaled"][key] = now
+                paper_calls.append(key)
             if position:
                 position["last_update_at"] = now
                 notified_positions.add(position["id"])
         queued += 1
+    if not dry and data.get("paper"):
+        if news_http:
+            fx.refresh(data, news_http, now)
+        for notice in paper.step(data, snapshots, analyses, paper_calls, now):
+            enqueue(state, notice)
     if news_http:
         from .news import refresh, correlate
         refresh(data, news_http, now)
@@ -167,8 +176,10 @@ def scan(state, config, market, now, dry=False, news_http=None):
         data["outbox"].append({"text": "📡 RADAR EM FUNCIONAMENTO\n"
             f"🔎 Consultei {len(snapshots)} moedas nesta verificação. "
             f"{'Há dados incompletos.' if data['health']['status'] != 'ok' else 'As fontes de mercado responderam.'}\n"
+            f"🎯 Calls de entrada enviadas nesta consulta: {len(paper_calls)}. Sem call não há uma compra nem um resultado.\n"
             "💼 Posições abertas continuam acompanhadas; um novo alerta não substitui as anteriores.\n"
             "⏳ Consultas previstas a cada 5 minutos, sujeitas a atrasos; não é vigilância em tempo real.\n"
+            "🧪 /resultados mostra saldo fictício em euros, ganhos/perdas e acerto.\n"
             "🧭 /ajuda explica tudo. Se não receberes esta confirmação durante 26h, verifica GitHub Actions."})
         data["health"]["heartbeat_at"] = now
     state.save()
@@ -184,7 +195,7 @@ def run(path="data/state.json", dry=False, telegram_test=False):
             if not dry:
                 telegram = Telegram(http)
                 note_gap(state, time.time())
-                if state.data["health"].get("commands_version") != 2:
+                if state.data["health"].get("commands_version") != 3:
                     try:
                         telegram.call("setMyCommands", {"commands": [
                             {"command": name, "description": description} for name, description in [
@@ -193,8 +204,11 @@ def run(path="data/state.json", dry=False, telegram_test=False):
                                 ("saidas", "Como funcionam os avisos de saída"), ("comprei", "Registar compra manual já feita"),
                                 ("simular", "Registar uma compra fictícia"), ("depositar", "Compreender como entram fundos"),
                                 ("retirar", "Compreender a saída para o banco"), ("noticias", "Notícias e cobertura disponível"),
-                                ("estado", "Estado e hora da última verificação"), ("cancelar", "Cancelar formulário")]]})
-                        state.data["health"]["commands_version"] = 2
+                                ("estado", "Estado e hora da última verificação"), ("cancelar", "Cancelar formulário"),
+                                ("resultados", "Saldo fictício em euros e taxa de acerto"),
+                                ("teste_iniciar", "Iniciar teste automático sem dinheiro real"),
+                                ("teste_parar", "Pausar novas entradas do teste")]]})
+                        state.data["health"]["commands_version"] = 3
                     except ApiError:
                         pass
             if telegram_test:
@@ -202,6 +216,7 @@ def run(path="data/state.json", dry=False, telegram_test=False):
                 telegram.send("Memecoin Radar Pro: ligação confirmada. Não executa transações. Usa /help.")
                 return
             if telegram:
+                fx.refresh(state.data, http, time.time())
                 flush(state, telegram)
                 consume(telegram, state, config, time.time())
             result = scan(state, config, Market(http), time.time(), dry, http)

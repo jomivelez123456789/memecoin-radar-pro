@@ -1,22 +1,29 @@
 """HTTP restrito a fornecedores conhecidos. Nunca incluir URLs em erros."""
 import json
 import time
+import ssl
+import certifi
 import urllib.error
 import urllib.request
 from urllib.parse import urlsplit
 
 
 class ApiError(RuntimeError):
-    pass
+    def __init__(self, message, *, host=None, status=None):
+        super().__init__(message)
+        self.host = host
+        self.status = status
 
 
 class Http:
     HOSTS = {"api.dexscreener.com": 0.3, "api.geckoterminal.com": 2.1,
              "api.telegram.org": 1.1, "api.github.com": 0.3,
-             "www.coindesk.com": 1.0, "cointelegraph.com": 1.0, "decrypt.co": 1.0}
+             "www.coindesk.com": 1.0, "cointelegraph.com": 1.0, "decrypt.co": 1.0,
+             "www.ecb.europa.eu": 1.0}
 
     def __init__(self):
         self.last = {}
+        self.context = ssl.create_default_context(cafile=certifi.where())
 
     def json(self, url, payload=None, headers=None, method=None, retry=True, raw=False):
         host = urlsplit(url).hostname
@@ -31,7 +38,7 @@ class Http:
                          **(headers or {})}, method=method)
             try:
                 # API redirects are rejected: a redirect must never leak credentials.
-                opener = urllib.request.build_opener(NoRedirect())
+                opener = urllib.request.build_opener(NoRedirect(), urllib.request.HTTPSHandler(context=self.context))
                 with opener.open(request, timeout=15) as response:
                     body = response.read(8_000_001)
                     if len(body) > 8_000_000:
@@ -47,12 +54,12 @@ class Http:
                     time.sleep(delay)
                     continue
                 error.close()
-                raise ApiError(f"{host}: HTTP {error.code}") from None
+                raise ApiError(f"{host}: HTTP {error.code}", host=host, status=error.code) from None
             except (urllib.error.URLError, TimeoutError, OSError, ValueError):
                 if retry and attempt < 2:
                     time.sleep(2 ** (attempt + 1))
                     continue
-                raise ApiError(f"{host}: indisponível ou resposta inválida") from None
+                raise ApiError(f"{host}: indisponível ou resposta inválida", host=host) from None
 
     def text(self, url):
         return self.json(url, headers={"Accept": "application/rss+xml, application/xml"},

@@ -30,6 +30,8 @@ Depois de venderes manualmente, abre `/posicoes` e usa «📝 Registar venda». 
 
 ## Ajuda dentro do Telegram
 
+Para o ensaio automático, usa `/teste_iniciar` e depois `/resultados`. É uma carteira separada com 1 000 € fictícios, até 100 €/call e cinco abertas. Recebes entradas, saídas e resumo a cada seis horas. `/teste_parar` pausa novas entradas. [Regras, custos assumidos e câmbio](TESTE_EUROS.md). Um acerto em uma call fechada dá 100% de acerto, não 100% de ganho de dinheiro.
+
 `/comprar`, `/vender`, `/depositar` e `/retirar` explicam os passos para a carteira e a diferença entre trocar um token, receber outro criptoativo e levantar euros. Começa sem fundos reais. `/noticias` mostra os RSS que responderam e as limitações; não cobre toda a Internet nem redes sociais.
 
 ## A tua primeira simulação
