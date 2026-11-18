@@ -23,6 +23,7 @@ PAGES = {
 🎯 /saidas — quando aparecem avisos de saída
 💼 /posicoes — ver as moedas que registaste
 📰 /noticias — fontes disponíveis e notícias recentes
+🔎 /pesquisa — amostra analisada, fontes e motivos para não entrar; resumo automático a cada 3h
 📡 /estado — última verificação
 🛑 /cancelar — cancelar um formulário
 

@@ -127,6 +127,7 @@ def news_view(data, now):
             lines.append(f"\n🗞️ {html.escape(item['source'])} · {stamp(item['published_at'])}\n"
                          f"<a href=\"{html.escape(item['url'], quote=True)}\">{html.escape(item['title'])}</a>")
     lines.append("\n🔗 Só associo uma notícia a uma moeda quando aparecem contrato completo e rede, juntamente com atividade de mercado. Nunca só pelo nome. "
-                 "Não leio todas as notícias nem monitorizo X, TikTok, Instagram, Reddit, YouTube ou grupos Telegram. "
+                 "Não leio todas as notícias nem monitorizo X, TikTok, Instagram, Reddit ou grupos Telegram. "
+                 "/pesquisa inclui títulos públicos de dois canais YouTube; não vejo vídeos ou transcrições. "
                  "Notícias não garantem lucro e não eliminam riscos do contrato.")
     return "\n".join(lines)

@@ -72,3 +72,10 @@ Executado também o modo de ensaio completo com mercado real: 16 observações, 
 ```
 
 Os dois últimos comandos precisam de Internet. O modo de ensaio guarda os resultados localmente em `data/dry-run.json`, fora do Git e separado do estado real. O relatório público contém só verificações técnicas e endereços de ativos públicos, sem posições ou identificadores Telegram pessoais.
+# Pesquisa ampliada — 18/11/2026
+
+113 testes Python e 5 testes do relógio passaram localmente. Novos casos: identidade/data/URL de vídeo YouTube, XML com DTD recusado, fontes indisponíveis sem interromper o mercado, cache, benchmark inválido sem preço inventado, contagem de repetidas/distintas, relatórios a cada 3h, amostra antiga sem moedas apresentadas como atuais, preservação do saldo/histórico, tendências quando pools novos falham e rotação da amostra.
+
+Teste público real, sem enviar alertas ou alterar a carteira fictícia: 60 candidatos com 60 cotações, Solana (30), Base (20) e Ethereum (10), 23 pares com pelo menos 24h. Nenhuma entrada cumpriu todos os critérios. Um endpoint de novos pools Ethereum esteve indisponível e foi identificado. As contagens variam com a consulta. Os dois feeds YouTube e os três benchmarks Coinbase responderam; 10 títulos recentes retidos. Não foi demonstrada rentabilidade.
+
+Diagnóstico agregado anterior à ampliação: a consulta de 18/11 às 14:01 UTC observou 30 candidatos; todos sem idade/histórico suficientes para a comparação de volume, 28 abaixo da liquidez mínima. O teste prospetivo tinha cerca de 25h, 1 000 € fictícios, zero calls e nenhuma taxa de acerto calculável. O universo foi ampliado sem apagar resultados nem afrouxar os filtros obrigatórios.

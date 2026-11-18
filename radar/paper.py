@@ -105,6 +105,7 @@ def report(data, now):
             f"📬 Calls A desde o início: {book['calls']} · não simuladas por limites/dados: {book['skipped']}\n"
             f"🔎 Observações de mercado: {book['observations']} · última avaliação: {stamp(book.get('last_scan'))}\n\n"
             f"{detail_text}"
+            + (f"🔎 Cobertura da pesquisa ampliada em {stamp(book['research_changes'][-1]['at'])}; saldo e histórico preservados.\n" if book.get("research_changes") else "") +
             "💡 1 acerto em 1 call fechada = 100% de acerto; não é duplicar o saldo. "
             "Abertas não contam como vitórias. Sem calls, não há prova de rentabilidade.\n"
             f"🧮 Regras fixas: até {eur(r['budget'])}/call, máximo {r['max_open']} abertas; "
@@ -166,6 +167,7 @@ def step(data, snapshots, analyses, calls, now):
             book["skip_log"] = book["skip_log"][-1000:]
             continue
         p = {"id": uuid.uuid4().hex[:10], "key": key, "name": s["name"], "opened_at": now,
+             "research_version": data.get("research", {}).get("version", "original"),
              "entry_quote_eur": price, "entry_fill_eur": fill, "entry_fx": dict(fx),
              "budget": r["budget"], "quantity": quantity, "stop": price * (1-r["stop"]),
              "take": price * (1+r["take"]), "closed_at": None, "last_observed_at": now,

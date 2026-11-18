@@ -19,7 +19,8 @@ class Http:
     HOSTS = {"api.dexscreener.com": 0.3, "api.geckoterminal.com": 2.1,
              "api.telegram.org": 1.1, "api.github.com": 0.3,
              "www.coindesk.com": 1.0, "cointelegraph.com": 1.0, "decrypt.co": 1.0,
-             "www.ecb.europa.eu": 1.0}
+             "www.ecb.europa.eu": 1.0, "www.youtube.com": 1.0,
+             "api.exchange.coinbase.com": 0.5}
 
     def __init__(self):
         self.last = {}

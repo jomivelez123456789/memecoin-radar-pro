@@ -41,6 +41,9 @@ def process(text, state, config, now):
     if command == "/noticias":
         from .news import news_view
         return news_view(data, now)
+    if command in ("/pesquisa", "/cobertura", "/fontes"):
+        from .research import view
+        return view(data, now)
     if command == "/tecnico":
         return ("🔧 <b>Comandos completos, opcionais</b>\n"
                 "/watch REDE CONTRATO\n/unwatch REDE CONTRATO\n"

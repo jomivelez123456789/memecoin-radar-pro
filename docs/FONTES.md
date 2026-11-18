@@ -1,5 +1,16 @@
 # Fontes oficiais consultadas
 
+## Ampliação verificada em 18/11/2026
+
+- GeckoTerminal: `trending_pools` além de `new_pools`, em Solana, Base e Ethereum (`eth` na API). Os candidatos são amostras dos fornecedores; não são todo o mercado. Até 60 por consulta, com rotação, mantendo prioridade das posições abertas.
+- [Coinbase Exchange: estatísticas de 24h](https://docs.cdp.coinbase.com/api-reference/exchange-api/rest-api/products/get-product-stats): BTC-USD, ETH-USD e SOL-USD, apenas variação percentual contextual. Sem conta, ordens ou chave.
+- Títulos, datas e links dos RSS públicos YouTube de [Coin Bureau](https://www.youtube.com/channel/UCqK_GSMbpiV8spgD3ZGloSw) e [Benjamin Cowen](https://www.youtube.com/channel/UCRvqjQPSeaWn-uEx-w0XOIg). Associação confirmada pelo título e ID do feed; canais escolhidos como comentários sobre cripto, sem validação de desempenho de trading. Não são lidos vídeos, transcrições, comentários ou todas as publicações sociais. As opiniões não alteram filtros ou score.
+- [TikTok Research API](https://developers.tiktok.com/products/research-api/) exige elegibilidade e aprovação; não foi ativada. Instagram, X, Reddit e grupos Telegram também não são monitorizados. Não se contornam logins ou bloqueios.
+
+`/pesquisa` mostra a cobertura realmente recolhida e falhas. Resumos previstos a cada 3h, além dos alertas e relatório do teste a cada 6h, sujeitos a execução. Contagens de observações incluem repetições; contratos distintos têm limite de 2 000 por período. A ausência de call não demonstra ausência de oportunidades noutros mercados. Os exemplos rejeitados têm links apenas para investigação, sem recomendação de entrada.
+
+O teste existente conserva saldo, trades, custos e regras. A ampliação do universo é datada no histórico; cada nova simulação regista a versão da pesquisa. Resultados de universos diferentes não constituem uma comparação controlada.
+
 Verificação em 12/11/2026. Preços, limites, interfaces e disponibilidade regional podem mudar; confirmar novamente antes de ativar serviços ou usar fundos.
 
 - [DexScreener — API](https://docs.dexscreener.com/api/reference): perfis recentes, dados por rede/contrato, limites e campos de pares.

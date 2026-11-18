@@ -41,7 +41,7 @@ def load_config(path="config.json"):
         if key != "chains" and (isinstance(value, bool) or not isinstance(value, (int, float))
                 or not math.isfinite(value) or (value < 0 and key not in ("exit_change_h1", "min_change_h1"))):
             raise ValueError("Configuração numérica inválida")
-    if not 1 <= config["max_alerts_per_run"] <= 20 or not 1 <= config["discovery_limit"] <= 30:
+    if not 1 <= config["max_alerts_per_run"] <= 20 or not 1 <= config["discovery_limit"] <= 60:
         raise ValueError("Limites de alertas/descoberta inválidos")
     if config["max_tracked_tokens"] < 60 + config["discovery_limit"]:
         raise ValueError("A capacidade deve preservar 30 posições, 30 tokens manuais e a descoberta")
@@ -120,6 +120,8 @@ def scan(state, config, market, now, dry=False, news_http=None):
                 position["last_update_at"] = now
                 notified_positions.add(position["id"])
         queued += 1
+    from . import research
+    research.observe(data, snapshots, analyses, paper_calls, getattr(market, "coverage", {}), config, now)
     if not dry and data.get("paper"):
         if news_http:
             fx.refresh(data, news_http, now)
@@ -172,6 +174,10 @@ def scan(state, config, market, now, dry=False, news_http=None):
     if not snapshots:
         state.save()
         raise ApiError("Nenhuma observação válida; execução degradada")
+    if news_http:
+        research.refresh(data, news_http, now)
+    if not dry:
+        enqueue(state, research.periodic(data, now))
     if not dry and now - data["health"].get("heartbeat_at", 0) >= 86400:
         data["outbox"].append({"text": "📡 RADAR EM FUNCIONAMENTO\n"
             f"🔎 Consultei {len(snapshots)} moedas nesta verificação. "
@@ -195,7 +201,7 @@ def run(path="data/state.json", dry=False, telegram_test=False):
             if not dry:
                 telegram = Telegram(http)
                 note_gap(state, time.time())
-                if state.data["health"].get("commands_version") != 3:
+                if state.data["health"].get("commands_version") != 4:
                     try:
                         telegram.call("setMyCommands", {"commands": [
                             {"command": name, "description": description} for name, description in [
@@ -205,10 +211,11 @@ def run(path="data/state.json", dry=False, telegram_test=False):
                                 ("simular", "Registar uma compra fictícia"), ("depositar", "Compreender como entram fundos"),
                                 ("retirar", "Compreender a saída para o banco"), ("noticias", "Notícias e cobertura disponível"),
                                 ("estado", "Estado e hora da última verificação"), ("cancelar", "Cancelar formulário"),
+                                ("pesquisa", "Moedas analisadas e motivos para não entrar"),
                                 ("resultados", "Saldo fictício em euros e taxa de acerto"),
                                 ("teste_iniciar", "Iniciar teste automático sem dinheiro real"),
                                 ("teste_parar", "Pausar novas entradas do teste")]]})
-                        state.data["health"]["commands_version"] = 3
+                        state.data["health"]["commands_version"] = 4
                     except ApiError:
                         pass
             if telegram_test:

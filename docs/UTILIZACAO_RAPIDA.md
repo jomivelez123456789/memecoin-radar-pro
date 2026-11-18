@@ -49,3 +49,6 @@ O relógio externo Cloudflare foi publicado no plano gratuito para iniciar anál
 Pode haver atraso no GitHub. Se passarem 26h sem a confirmação diária, consulta [as execuções do radar](https://github.com/jomivelez123456789/memecoin-radar-pro/actions/workflows/radar.yml). Um serviço que deixou de executar não consegue garantir que avisa da própria paragem. Não dependas apenas do bot para avaliar uma posição.
 
 Para parar verificações, usa `Disable workflow` na página acima. Isso não vende ativos nem altera saldos de carteiras.
+# Pesquisa e updates (18/11/2026)
+
+Envia `/pesquisa` para ver a amostra recente, por que os filtros rejeitaram moedas, exemplos com gráfico e a cobertura disponível. `/fontes` e `/cobertura` são atalhos. O bot envia este resumo de 3 em 3 horas, mesmo sem call, enquanto as verificações executarem; aproximadamente 8 por dia, sujeitos a atrasos. `/resultados` continua a separar ganho em euros e taxa de acerto. Notícias e títulos YouTube dão contexto, não são calls. Não há acompanhamento de TikTok ou Instagram.

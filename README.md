@@ -10,7 +10,9 @@ Monitorização experimental em Python, em português europeu. **Não compra, ve
 - Código e workflows publicados no GitHub; Telegram configurado e consultas previstas a cada 5 minutos, com histórico cifrado. O agendamento pode atrasar ou falhar; não há garantia de serviço contínuo em tempo real.
 - Mensagens simples com emojis, botões, registo guiado de compras/simulações/vendas e acompanhamento separado de até 30 posições abertas, com resumos periódicos e avisos de níveis/risco.
 - RSS de Cointelegraph, Decrypt e CoinDesk, com falhas explicitamente identificadas. Notícias só são ligadas a uma moeda quando mencionam endereço completo e rede, juntamente com atividade de mercado. Não verificam a veracidade da notícia nem aumentam o score.
-- Redes sociais, auditoria on-chain e imagens de gráficos continuam fora desta versão; não existe acesso fictício a plataformas nem uma estratégia de lucro validada.
+- Pesquisa ampliada: até 60 candidatos por consulta em Solana, Base e Ethereum, intercalando perfis recentes, pools novos e tendências; rotação da amostra para não repetir apenas o início da lista. Não cobre todos os tokens nem confirma que sejam memecoins.
+- `/pesquisa` e resumos previstos de 3 em 3 horas: observações, contratos distintos, motivos de rejeição, exemplos com gráficos, notícias, contexto de BTC/ETH/SOL e títulos públicos dos canais YouTube Coin Bureau e Benjamin Cowen. Não são recomendações nem previsões. Fontes indisponíveis são identificadas.
+- Não vê vídeos/transcrições nem monitoriza TikTok, Instagram, X ou grupos. Auditoria on-chain e imagens de gráficos continuam fora desta versão; não existe uma estratégia de lucro validada.
 
 **Disponibilidade:** foi observado um atraso de horas no cron GitHub. Foi publicado um [relógio externo Cloudflare](docs/RELOGIO_ALTERNATIVO.md) no plano gratuito, configurado para iniciar análises a cada cinco minutos, sem depender do computador ligado. Duas análises automáticas separadas por cinco minutos e as respostas Telegram foram confirmadas em 16/11/2026. A autorização GitHub precisa de renovação antes de **13/12/2026**. Não existe garantia de vigilância contínua ou de saída atempada; mantém simulações enquanto a disponibilidade não for adequada ao uso pretendido.
 
@@ -33,7 +35,7 @@ No Telegram, envia `/ajuda`, `/estado` ou `/posicoes`. `/comprar`, `/vender`, `/
 
 Usa «🧪 Simular» ou «📝 Já comprei» no alerta, confirma o contrato e responde a um formulário curto numa única mensagem. Só regista compras reais que já efetuaste manualmente. «👀 Só acompanhar» não cria uma posição. Em `/posicoes`, «📝 Registar venda» atualiza o registo depois da venda manual ou durante uma simulação. `/tecnico` mantém os comandos completos opcionais. Nenhum sinal significa que compraste.
 
-Todos os preços e registos monetários são em USD. Um preço apresentado não garante uma venda por esse preço. Stop e objetivo são referências para alertas, sem execução de ordens.
+Os formulários manuais usam USD; o teste automático usa euros com referência diária do BCE. Um preço apresentado não garante uma venda por esse preço. Stop e objetivo são referências para alertas, sem execução de ordens.
 
 ## Organização
 
