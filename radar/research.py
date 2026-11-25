@@ -8,7 +8,7 @@ from .http import ApiError
 from .model import links
 from .telegram import stamp
 
-VERSION = "public-research-v2"
+from .entry_memory import VERSION
 CHANNELS = {
     "Coin Bureau": "UCqK_GSMbpiV8spgD3ZGloSw",
     "Benjamin Cowen": "UCRvqjQPSeaWn-uEx-w0XOIg",
@@ -85,7 +85,7 @@ def observe(data, snapshots, analyses, calls, coverage, config, now):
         if data.get("paper"):
             data["paper"].setdefault("research_changes", []).append({"at": now, "version": VERSION,
                 "chains": config["chains"], "discovery_limit": config["discovery_limit"],
-                "note": "Universo de descoberta ampliado; regras de entrada e saldo preservados."})
+                "note": "Nova hipótese prospetiva: confirmação do mesmo par e pausa de novas calls após duas perdas no contrato em 72h. Histórico e custos preservados."})
     window = research.setdefault("window", {"since": now, "scans": 0, "observations": 0,
                                            "unique": {}, "blocked": {}, "qualified": 0, "calls": 0})
     window["scans"] += 1
@@ -95,6 +95,7 @@ def observe(data, snapshots, analyses, calls, coverage, config, now):
     for key, a in analyses.items():
         window["unique"][key] = now
         blockers.update(name for name, ok in a["checks"].items() if not ok)
+        blockers.update(a.get("entry_blockers", []))
         window["qualified"] += bool(a["entry"])
     # Bound state size even if reporting is interrupted for days.
     window["unique"] = dict(sorted(window["unique"].items(), key=lambda pair: pair[1], reverse=True)[:2000])
@@ -102,6 +103,7 @@ def observe(data, snapshots, analyses, calls, coverage, config, now):
     ranked = sorted(analyses, key=lambda key: (analyses[key]["score"], not analyses[key]["risk"]), reverse=True)
     research.update(last_scan=now, coverage=coverage, chains=config["chains"],
                     sample=[{"key": key, "name": snapshots[key]["name"], "checks": analyses[key]["checks"],
+                             "entry_blockers": analyses[key].get("entry_blockers", []),
                              "risk": analyses[key]["risk"], "entry": analyses[key]["entry"]} for key in ranked[:3]])
 
 
@@ -125,7 +127,7 @@ def view(data, now):
         for item in r.get("sample", []):
             chain, address = item["key"].split(":", 1)
             failed = [name for name, ok in item["checks"].items() if not ok]
-            reason = "; ".join(item["risk"] or [FILTER_HELP.get(name, name) for name in failed]) or "filtros cumpridos; consultar alerta e possível intervalo entre avisos"
+            reason = "; ".join(item.get("entry_blockers") or item["risk"] or [FILTER_HELP.get(name, name) for name in failed]) or "filtros cumpridos; consultar alerta e possível intervalo entre avisos"
             lines.append(f"• <a href=\"{html.escape(links(chain, address)['chart'], quote=True)}\">{html.escape(item['name'])}</a> "
                          f"({chain}): {sum(item['checks'].values())}/8 filtros. {html.escape(reason)}.")
     else:
@@ -143,9 +145,14 @@ def view(data, now):
     unavailable = [name for name, status in {**r.get("coverage", {}), **r.get("sources", {}), **news.get("sources", {})}.items() if "indisponível" in status]
     if unavailable:
         lines.append("\n⚠️ Fontes sem acesso nesta recolha: " + html.escape(", ".join(unavailable)))
+    social = data.get("social", {})
+    if social.get("last_attempt"):
+        lines.append(f"\n📱 TikTok/Reddit: {len(social.get('items', []))} publicações recentes legíveis na tentativa de "
+                     f"{stamp(social['last_attempt'])}. /sociais mostra fontes e bloqueios; zero posts não confirma acompanhamento.")
     lines.append("\n📚 YouTube: apenas títulos e links de 2 canais; não vejo vídeos, transcrições ou comentários. "
                  "Notícias e opiniões dão contexto, não aumentam o score nem provam lucro. "
-                 "TikTok, Instagram, X e grupos não estão monitorizados. Não cubro toda a internet nem todos os mercados. "
+                 "/sociais mostra as tentativas e o acesso real ao TikTok e Reddit; uma tentativa sem posts não é acompanhamento. "
+                 "Tentativas de leitura de perfis Instagram/X também podem falhar; grupos não são lidos. Não cubro toda a internet nem todos os mercados. "
                  "🧪 /resultados · 📰 /noticias · 🔎 /pesquisa. Resumo previsto de 3 em 3 horas, sujeito a atrasos.")
     return "\n".join(lines)
 

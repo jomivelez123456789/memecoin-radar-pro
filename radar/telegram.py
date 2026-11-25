@@ -27,6 +27,8 @@ def alert(s, analysis, category, reasons, config):
     if category.startswith("A"):
         heading = "🟡 POSSÍVEL ENTRADA — para analisares"
         explanation = "Há mais atividade e pressão compradora, com os filtros de mercado cumpridos. Isto não prova que a moeda seja segura nem que vá subir."
+        if "market_filters_passed" in analysis:
+            explanation += " Houve confirmação noutra consulta do mesmo par; a memória de perdas também foi consultada. Esta hipótese ainda está em teste."
         action = "Começa por «🧪 Simular». Se comprares manualmente, regista em «📝 Já comprei»; só assim fica como uma posição tua."
     elif category.startswith("B"):
         heading = "🟠 MOEDA EM OBSERVAÇÃO — condições pioraram"

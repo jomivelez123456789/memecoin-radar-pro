@@ -4,6 +4,10 @@ Monitorização experimental em Python, em português europeu. **Não compra, ve
 
 ## Estado desta entrega
 
+- Revisão automática: `/aprender` separa perdas fictícias, custos assumidos e incidentes técnicos. A evidência das entradas antigas só é recuperada quando existe um único alerta original com o mesmo contrato e instante. Nenhum resultado é apagado.
+- Versão prospetiva de 25/11: confirmação em duas consultas do mesmo par (3–10 minutos), suspensão de novas calls após duas perdas nesse contrato em 72h e acompanhamento das posições fictícias no par original conhecido. É uma hipótese nova, sem rentabilidade demonstrada; os níveis e custos das posições existentes são preservados.
+- `/sociais`: recolha pública de texto do perfil X Coin Bureau e amostras Reddit r/solana/r/CryptoCurrency via Redlisten, sem conta/chave/pagamento. Só conteúdos datados e identificados são aceites. TikTok e Instagram ficam indisponíveis se o servidor não fornecer publicações legíveis, mesmo que sejam visíveis numa visita manual ao navegador.
+
 - Recolha real de DexScreener e descoberta complementar de pools no GeckoTerminal: verificadas.
 - Motor de filtros, alertas A/B/C, lista manual, posições simuladas/reais registadas manualmente, vendas parciais e histórico: implementados.
 - Mensagens Telegram com gráfico, token no Phantom, contrato copiável e `/detail`: implementadas; entrega num Telegram real depende da configuração pessoal.
@@ -12,7 +16,7 @@ Monitorização experimental em Python, em português europeu. **Não compra, ve
 - RSS de Cointelegraph, Decrypt e CoinDesk, com falhas explicitamente identificadas. Notícias só são ligadas a uma moeda quando mencionam endereço completo e rede, juntamente com atividade de mercado. Não verificam a veracidade da notícia nem aumentam o score.
 - Pesquisa ampliada: até 60 candidatos por consulta em Solana, Base e Ethereum, intercalando perfis recentes, pools novos e tendências; rotação da amostra para não repetir apenas o início da lista. Não cobre todos os tokens nem confirma que sejam memecoins.
 - `/pesquisa` e resumos previstos de 3 em 3 horas: observações, contratos distintos, motivos de rejeição, exemplos com gráficos, notícias, contexto de BTC/ETH/SOL e títulos públicos dos canais YouTube Coin Bureau e Benjamin Cowen. Não são recomendações nem previsões. Fontes indisponíveis são identificadas.
-- Não vê vídeos/transcrições nem monitoriza TikTok, Instagram, X ou grupos. Auditoria on-chain e imagens de gráficos continuam fora desta versão; não existe uma estratégia de lucro validada.
+- Não vê vídeos/transcrições nem garante acompanhamento TikTok/Instagram ou grupos. X e Reddit têm apenas a cobertura parcial descrita em `/sociais`. Auditoria on-chain e imagens de gráficos continuam fora desta versão; não existe uma estratégia de lucro validada.
 
 **Disponibilidade:** foi observado um atraso de horas no cron GitHub. Foi publicado um [relógio externo Cloudflare](docs/RELOGIO_ALTERNATIVO.md) no plano gratuito, configurado para iniciar análises a cada cinco minutos, sem depender do computador ligado. Duas análises automáticas separadas por cinco minutos e as respostas Telegram foram confirmadas em 16/11/2026. A autorização GitHub precisa de renovação antes de **13/12/2026**. Não existe garantia de vigilância contínua ou de saída atempada; mantém simulações enquanto a disponibilidade não for adequada ao uso pretendido.
 

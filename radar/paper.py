@@ -109,7 +109,8 @@ def report(data, now):
             "💡 1 acerto em 1 call fechada = 100% de acerto; não é duplicar o saldo. "
             "Abertas não contam como vitórias. Sem calls, não há prova de rentabilidade.\n"
             f"🧮 Regras fixas: até {eur(r['budget'])}/call, máximo {r['max_open']} abertas; "
-            f"limite {r['stop']*100:g}% / objetivo {r['take']*100:g}% em EUR, saída por risco ou após {r['max_hold_hours']}h.\n"
+            f"limite de cotação −{r['stop']*100:g}% / objetivo de cotação +{r['take']*100:g}% em EUR, saída por risco ou após {r['max_hold_hours']}h. "
+            "São movimentos da cotação antes dos custos, não limites garantidos do ganho/perda líquido.\n"
             f"Custos fictícios em CADA lado: {r['fee']*100:g}% + {eur(r['fixed_fee'])}; "
             f"desvio desfavorável de {r['slippage']*100:g}%. Não são tarifas reais verificadas.\n"
             f"💱 BCE: {html.escape(fx.get('date', 'indisponível'))}; referência diária, não taxa de execução bancária.\n"
@@ -132,6 +133,8 @@ def step(data, snapshots, analyses, calls, now):
             continue
         if now - p.get("last_observed_at", p["opened_at"]) > 900:
             p["monitoring_gap"] = True
+        if s.get("pair") and p.get("entry_pair") and s["pair"] != p["entry_pair"]:
+            p["pair_changed"] = True
         p["last_observed_at"] = now
         risks = [x for x in analyses.get(p["key"], {}).get("risk", []) if not x.startswith("subida extrema")]
         reason = ("limite de perda ultrapassado" if price <= p["stop"] else
@@ -144,7 +147,9 @@ def step(data, snapshots, analyses, calls, now):
                 continue
             book["cash"] += net
             p.update({"closed_at": now, "exit_quote_eur": price, "exit_fx": dict(fx),
-                      "proceeds": net, "pnl": round(net - p["budget"], 2), "reason": reason})
+                      "proceeds": net, "pnl": round(net - p["budget"], 2), "reason": reason,
+                      "exit_evidence": {"pair": s.get("pair"), "observed_at": s.get("observed_at"),
+                                        "risk": list(risks)}})
             outcome = "✅ GANHO FICTÍCIO" if p["pnl"] > 1e-8 else "❌ PERDA FICTÍCIA" if p["pnl"] < -1e-8 else "➖ EMPATE FICTÍCIO"
             events.append({"text": f"🧪 <b>{outcome} — CALL ENCERRADA</b>\n🪙 {html.escape(p['name'])}\n"
                            f"💡 {html.escape(reason)}\nResultado após custos assumidos: <b>{eur(p['pnl'])}</b> "
@@ -168,6 +173,10 @@ def step(data, snapshots, analyses, calls, now):
             continue
         p = {"id": uuid.uuid4().hex[:10], "key": key, "name": s["name"], "opened_at": now,
              "research_version": data.get("research", {}).get("version", "original"),
+             "entry_pair": s.get("pair"),
+             "entry_evidence": {"analysis": copy.deepcopy(analyses.get(key, {})),
+                                "snapshot": copy.deepcopy(s),
+                                "source_commit": os.environ.get("GITHUB_SHA", "local")},
              "entry_quote_eur": price, "entry_fill_eur": fill, "entry_fx": dict(fx),
              "budget": r["budget"], "quantity": quantity, "stop": price * (1-r["stop"]),
              "take": price * (1+r["take"]), "closed_at": None, "last_observed_at": now,

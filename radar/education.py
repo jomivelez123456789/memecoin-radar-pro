@@ -24,6 +24,8 @@ PAGES = {
 💼 /posicoes — ver as moedas que registaste
 📰 /noticias — fontes disponíveis e notícias recentes
 🔎 /pesquisa — amostra analisada, fontes e motivos para não entrar; resumo automático a cada 3h
+🧠 /aprender — revisão dos resultados e das falhas de funcionamento
+📱 /sociais — tentativas automáticas e acesso real a Reddit/TikTok
 📡 /estado — última verificação
 🛑 /cancelar — cancelar um formulário
 
