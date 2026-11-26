@@ -9,6 +9,7 @@ class Market:
     def __init__(self, http):
         self.http = http
         self.coverage = {}
+        self.preferred_pairs = {}
 
     def discover(self, chains, limit):
         buckets, errors = {}, []
@@ -73,8 +74,25 @@ class Market:
                     errors.extend(identity(chain, address) for address in batch)
                     continue
                 for address in batch:
+                    key = identity(chain, address)
                     candidates = [s for pair in pairs if isinstance(pair, dict)
                                   and (s := normalize(pair, chain, address, now)) is not None]
+                    preferred = self.preferred_pairs.get(key)
+                    if preferred:
+                        try:
+                            wanted = identity(chain, preferred)
+                            def same_pair(snapshot):
+                                try:
+                                    return identity(chain, snapshot.get("pair")) == wanted
+                                except ValueError:
+                                    return False
+                            candidates = [s for s in candidates if same_pair(s)]
+                            if not candidates:
+                                exact = self.http.json(f"https://api.dexscreener.com/latest/dex/pairs/{chain}/{quote(preferred, safe='')}")
+                                candidates = [s for pair in (exact.get("pairs") or []) if isinstance(pair, dict)
+                                              and (s := normalize(pair, chain, address, now)) is not None and same_pair(s)]
+                        except (ValueError, ApiError):
+                            candidates = []
                     if candidates:
                         best = max(candidates, key=lambda s: s.get("liquidity") or 0)
                         snapshots[best["key"]] = best

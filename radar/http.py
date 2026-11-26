@@ -20,7 +20,8 @@ class Http:
              "api.telegram.org": 1.1, "api.github.com": 0.3,
              "www.coindesk.com": 1.0, "cointelegraph.com": 1.0, "decrypt.co": 1.0,
              "www.ecb.europa.eu": 1.0, "www.youtube.com": 1.0,
-             "api.exchange.coinbase.com": 0.5}
+             "api.exchange.coinbase.com": 0.5, "www.tiktok.com": 2.0, "www.reddit.com": 2.0,
+             "redlisten.com": 2.0, "www.instagram.com": 2.0, "x.com": 2.0}
 
     def __init__(self):
         self.last = {}
