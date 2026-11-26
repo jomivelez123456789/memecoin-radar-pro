@@ -296,7 +296,7 @@ class NewsTests(unittest.TestCase):
     def test_feed_failure_is_explicit_and_does_not_stop_market(self):
         class Fake:
             def text(self, url): raise ApiError("indisponível")
-            def json(self, url): raise ApiError("indisponível")
+            def json(self, url, **kwargs): raise ApiError("indisponível")
         with tempfile.TemporaryDirectory() as directory:
             state = State(Path(directory) / "state.json")
             result = scan(state, self.config, FakeMarket(), NOW, news_http=Fake())

@@ -144,10 +144,11 @@ class RadarTests(unittest.TestCase):
                 with self.state.lock(): pass
 
     def test_scan_cooldown_persists(self):
+        scan(self.state, self.config, FakeMarket(), NOW - 300)
         scan(self.state, self.config, FakeMarket(), NOW)
         n = len(self.state.data["outbox"])
         restored = State(self.state.path)
-        scan(restored, self.config, FakeMarket(), NOW + 900)
+        scan(restored, self.config, FakeMarket(), NOW + 600)
         self.assertEqual(len(restored.data["outbox"]), n)
         self.assertEqual(len(restored.data["history"]), 1)
 
@@ -157,6 +158,7 @@ class RadarTests(unittest.TestCase):
         self.assertFalse(self.state.data["cooldowns"])
 
     def test_signal_never_implies_ownership(self):
+        scan(self.state, self.config, FakeMarket(), NOW - 300)
         scan(self.state, self.config, FakeMarket(), NOW)
         self.assertFalse(self.state.data["positions"])
         self.assertTrue(self.state.data["signaled"])

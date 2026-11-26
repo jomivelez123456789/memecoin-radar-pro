@@ -52,3 +52,7 @@ Para parar verificações, usa `Disable workflow` na página acima. Isso não ve
 # Pesquisa e updates (18/11/2026)
 
 Envia `/pesquisa` para ver a amostra recente, por que os filtros rejeitaram moedas, exemplos com gráfico e a cobertura disponível. `/fontes` e `/cobertura` são atalhos. O bot envia este resumo de 3 em 3 horas, mesmo sem call, enquanto as verificações executarem; aproximadamente 8 por dia, sujeitos a atrasos. `/resultados` continua a separar ganho em euros e taxa de acerto. Notícias e títulos YouTube dão contexto, não são calls. Não há acompanhamento de TikTok ou Instagram.
+
+## Revisão e redes sociais (25/11/2026)
+
+`/aprender` mostra a revisão das calls, custos e falhas técnicas. `/sociais` mostra o texto X e as amostras Reddit realmente acessíveis e identifica TikTok/Instagram sem acesso confirmado. Não analisa vídeos ou comentários nem todo o conteúdo dessas plataformas. [Revisão completa e limites](REVISAO_E_FONTES_SOCIAIS.md).

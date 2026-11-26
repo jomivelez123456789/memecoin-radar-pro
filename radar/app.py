@@ -22,6 +22,8 @@ def note_gap(state, now):
         return
     gap = int(now - last)
     health.update({"last_gap_seconds": gap, "last_gap_at": now})
+    from .learning import incident
+    incident(state.data, now, "intervalo sem verificações")
     if now - health.get("gap_notice_at", 0) < 1800:
         return
     minutes = max(1, gap // 60)
@@ -63,21 +65,31 @@ def flush(state, telegram):
 
 def scan(state, config, market, now, dry=False, news_http=None):
     data = state.data
+    from .learning import recover_entries
+    recover_entries(data, now)
+    if hasattr(market, "preferred_pairs"):
+        market.preferred_pairs = {p["key"]: p["entry_pair"] for p in paper.opened(data) if p.get("entry_pair")}
     discovered, discovery_errors = market.discover(config["chains"], config["discovery_limit"])
     active = [p for p in data["positions"] if p["remaining"] > 0]
     recent = [key for key, stamp in data["signaled"].items() if now - stamp <= config["signal_watch_hours"] * 3600]
     # Positions and manual watchlist have priority over discovery; never infer ownership from alerts.
     owned_and_manual = list(dict.fromkeys([p["key"] for p in active] + data["watched"]
                                         + [p["key"] for p in paper.opened(data)]))
+    pending = [key for key, item in data.get("entry_memory", {}).items() if 0 <= now - item["at"] <= 600]
     recent = sorted(recent, key=lambda key: data["signaled"][key], reverse=True)
     slots = max(0, config["max_tracked_tokens"] - len(owned_and_manual) - len(discovered))
     tracked = list(dict.fromkeys(owned_and_manual + [key for key in recent if key not in owned_and_manual][:slots]))
-    keys = list(dict.fromkeys(tracked + discovered))[:config["max_tracked_tokens"]]
+    keys = list(dict.fromkeys(tracked + pending + discovered))[:config["max_tracked_tokens"]]
     snapshots, errors = market.fetch(keys, now)
     candidates, analyses, paper_calls = [], {}, []
     for key, s in snapshots.items():
         positions = [p for p in active if p["key"] == key]
         a = evaluate(s, config, data["snapshots"].get(key), key in tracked, positions)
+        from .entry_memory import check as entry_check
+        a["entry_blockers"] = entry_check(data, s, a, now)
+        a["market_filters_passed"] = a["entry"]
+        if a["entry_blockers"]:
+            a["entry"] = False
         analyses[key] = a
         if a["exit_events"]:
             for event in a["exit_events"]:
@@ -127,6 +139,8 @@ def scan(state, config, market, now, dry=False, news_http=None):
             fx.refresh(data, news_http, now)
         for notice in paper.step(data, snapshots, analyses, paper_calls, now):
             enqueue(state, notice)
+        from .learning import review
+        enqueue(state, review(data, now))
     if news_http:
         from .news import refresh, correlate
         refresh(data, news_http, now)
@@ -176,6 +190,8 @@ def scan(state, config, market, now, dry=False, news_http=None):
         raise ApiError("Nenhuma observação válida; execução degradada")
     if news_http:
         research.refresh(data, news_http, now)
+        from .social import refresh as refresh_social
+        refresh_social(data, news_http, now)
     if not dry:
         enqueue(state, research.periodic(data, now))
     if not dry and now - data["health"].get("heartbeat_at", 0) >= 86400:
@@ -201,7 +217,7 @@ def run(path="data/state.json", dry=False, telegram_test=False):
             if not dry:
                 telegram = Telegram(http)
                 note_gap(state, time.time())
-                if state.data["health"].get("commands_version") != 4:
+                if state.data["health"].get("commands_version") != 5:
                     try:
                         telegram.call("setMyCommands", {"commands": [
                             {"command": name, "description": description} for name, description in [
@@ -212,10 +228,12 @@ def run(path="data/state.json", dry=False, telegram_test=False):
                                 ("retirar", "Compreender a saída para o banco"), ("noticias", "Notícias e cobertura disponível"),
                                 ("estado", "Estado e hora da última verificação"), ("cancelar", "Cancelar formulário"),
                                 ("pesquisa", "Moedas analisadas e motivos para não entrar"),
+                                ("aprender", "Revisão das calls e falhas de funcionamento"),
+                                ("sociais", "Acesso real a publicações Reddit e TikTok"),
                                 ("resultados", "Saldo fictício em euros e taxa de acerto"),
                                 ("teste_iniciar", "Iniciar teste automático sem dinheiro real"),
                                 ("teste_parar", "Pausar novas entradas do teste")]]})
-                        state.data["health"]["commands_version"] = 4
+                        state.data["health"]["commands_version"] = 5
                     except ApiError:
                         pass
             if telegram_test:
@@ -230,7 +248,9 @@ def run(path="data/state.json", dry=False, telegram_test=False):
             if telegram:
                 flush(state, telegram)
             print(json.dumps(result, ensure_ascii=False))
-        except Exception:
+        except Exception as error:
+            from .learning import incident
+            incident(state.data, time.time(), "falha da execução", getattr(error, "host", None), getattr(error, "status", None))
             state.data["health"].update({"last_failure": time.time(), "status": "falha"})
             state.save()
             if telegram:

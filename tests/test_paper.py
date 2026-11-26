@@ -145,6 +145,7 @@ class PaperTests(unittest.TestCase):
         self.assertLess(s["realized"], 0)
 
     def test_scan_opens_only_actual_eligible_A_and_preserves_manual_positions(self):
+        scan(self.state, self.config, FakeMarket(self.s), NOW - 300)
         scan(self.state, self.config, FakeMarket(self.s), NOW)
         self.assertEqual(len(paper.opened(self.d)), 1)
         self.assertEqual(self.d["positions"], [])
